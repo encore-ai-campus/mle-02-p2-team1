@@ -1,2 +1,2 @@
-# mle-02-p2-team1
+# mle-02-p2-Bulse
 Team Firebird - AI Project
