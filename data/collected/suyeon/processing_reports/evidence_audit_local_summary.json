@@ -1,0 +1,12 @@
+{
+  "legacy_rows": 95,
+  "legacy_with_evidence": 93,
+  "legacy_missing_evidence": 2,
+  "whole_excerpt_matches": 5,
+  "all_evidence_lines_match": 31,
+  "some_evidence_lines_match": 31,
+  "legacy_raw_files_whole_excerpt_match": 4,
+  "legacy_raw_files_checked": 43,
+  "relations_needing_chunk_review": 96,
+  "quotes_found_in_linked_full_document": 3
+}

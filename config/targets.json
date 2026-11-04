@@ -1,0 +1,18 @@
+{
+  "targets": [
+    {
+      "brand_name": "이니스프리",
+      "collector": "suyeon",
+      "aliases": ["이니스프리", "주식회사 이니스프리", "(주)이니스프리", "INNISFREE"],
+      "legal_name": "(주)이니스프리",
+      "corp_code": "00812353"
+    },
+    {
+      "brand_name": "에스쁘아",
+      "collector": "suyeon",
+      "aliases": ["에스쁘아", "주식회사 에스쁘아", "(주)에스쁘아", "ESPOIR"],
+      "legal_name": "주식회사 에스쁘아",
+      "corp_code": "01061150"
+    }
+  ]
+}
