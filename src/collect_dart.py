@@ -188,7 +188,30 @@ def collect_filings(from_date: str, to_date: str, download_documents: bool) -> N
                     try:
                         api_error = document.json()
                     except ValueError:
-                        api_error = {"message": "원문 ZIP이 아닌 응답"}
+                        try:
+                            error_root = ET.fromstring(document.content)
+                            api_error = {
+                                child.tag: (child.text or "").strip()
+                                for child in error_root
+                                if child.tag in {"status", "message"}
+                            }
+                        except ET.ParseError:
+                            api_error = {"message": "원문 ZIP이 아닌 응답"}
+                    # Keep the response for audit; it contains no request URL or API key.
+                    archive_file.with_suffix(".response.json").write_text(
+                        json.dumps(
+                            {
+                                "rcept_no": receipt,
+                                "target_brand": target["brand_name"],
+                                "corp_code": corp_code,
+                                "collected_at": datetime.now(timezone.utc).isoformat(),
+                                "response": api_error,
+                            },
+                            ensure_ascii=False,
+                            indent=2,
+                        ),
+                        encoding="utf-8",
+                    )
                     print(f"원문 ZIP 미수집 ({receipt}): {api_error.get('status', '')} {api_error.get('message', '')}")
                 time.sleep(0.25)
 

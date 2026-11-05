@@ -22,6 +22,7 @@ COMPANY_IDS = {
     "아모스프로페셔널": "COMPANY-AMOSPROFESSIONAL",
     "코스알엑스": "COMPANY-COSRX",
 }
+TARGETS_FILE = ROOT / "config" / "targets.json"
 
 
 def normalize_text(value: str) -> str:
@@ -80,7 +81,16 @@ def iso_date(value: Any) -> str | None:
 
 
 def main() -> None:
-    archives = sorted(RAW.rglob("*.zip")) if RAW.exists() else []
+    # Only process archives inside a named target-company folder. Local scratch
+    # ZIPs may sit directly under data/raw/filings and have no company metadata.
+    archives = sorted(
+        (
+            archive
+            for company_dir in RAW.iterdir()
+            if company_dir.is_dir()
+            for archive in company_dir.glob("*.zip")
+        )
+    ) if RAW.exists() else []
     if not archives:
         raise SystemExit("원문 ZIP이 없습니다. 먼저 collect_dart.py --download-documents로 수집하세요.")
     records_by_owner: dict[str, dict[str, dict[str, Any]]] = {}
@@ -115,6 +125,30 @@ def main() -> None:
             "processing_status": "정제 완료" if clean_text else "확인 필요",
         }
         records_by_owner.setdefault(owner, {})[record["document_id"]] = record
+
+    targets = json.loads(TARGETS_FILE.read_text(encoding="utf-8"))["targets"]
+    for target in targets:
+        owner = str(target["collector"])
+        prefix = OWNER_PREFIX.get(owner, owner[:2].upper())
+        raw_path = RAW.parent / "companies" / str(target["brand_name"]) / "company_info.json"
+        if not raw_path.exists():
+            continue
+        payload = json.loads(raw_path.read_text(encoding="utf-8"))
+        doc_id = f"DOC-{prefix}-API-{target['corp_code']}"
+        record = {
+            "document_id": doc_id,
+            "source_type": "public_data",
+            "source_name": "Open DART 기업개황 API",
+            "title": "기업개황",
+            "original_url": f"https://opendart.fss.or.kr/api/company.json?corp_code={target['corp_code']}",
+            "published_at": None,
+            "collected_at": payload.get("collected_at") or datetime.now(timezone.utc).isoformat(),
+            "company_ids": [target["company_id"]],
+            "raw_path": raw_path.relative_to(ROOT).as_posix(),
+            "clean_text": None,
+            "processing_status": "수집 완료" if payload.get("company_info", {}).get("status") == "000" else "확인 필요",
+        }
+        records_by_owner.setdefault(owner, {})[doc_id] = record
 
     for owner, records in records_by_owner.items():
         output = COLLECTED / owner / "documents.jsonl"

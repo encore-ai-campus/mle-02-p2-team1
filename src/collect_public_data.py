@@ -10,10 +10,7 @@ from dotenv import load_dotenv
 
 ROOT = Path(__file__).resolve().parents[1]
 API = "https://apis.data.go.kr/1160100/service/GetCorpBasicInfoService_V2"
-TARGETS = {
-    "innisfree": {"name": "이니스프리", "fss_corp_code": "00812353"},
-    "espoir": {"name": "에스쁘아", "fss_corp_code": "01061150"},
-}
+TARGETS_FILE = ROOT / "config" / "targets.json"
 
 load_dotenv(ROOT / ".env")
 
@@ -42,7 +39,7 @@ def get_profile(name: str, key: str) -> dict[str, Any]:
         return response.json()
     except requests.RequestException as exc:
         # Avoid printing the request URL because the API key is a query parameter.
-        raise SystemExit(f"금융위 기업개요 API 요청 실패: {exc.__class__.__name__}") from None
+        raise RuntimeError(exc.__class__.__name__) from None
     except ValueError:
         raise SystemExit("금융위 기업개요 API가 JSON이 아닌 응답을 반환했습니다.") from None
 
@@ -53,26 +50,57 @@ def items_from(payload: dict[str, Any]) -> list[dict[str, Any]]:
     return [items] if isinstance(items, dict) else list(items or [])
 
 
+def load_targets() -> list[dict[str, str]]:
+    config = json.loads(TARGETS_FILE.read_text(encoding="utf-8"))
+    return [
+        {
+            "slug": str(target["company_id"]).removeprefix("COMPANY-").lower(),
+            "name": str(target["brand_name"]),
+            "fss_corp_code": str(target["corp_code"]),
+        }
+        for target in config["targets"]
+    ]
+
+
+def normalized_corp_code(value: Any) -> str:
+    return str(value or "").strip().zfill(8)
+
+
 def collect() -> None:
     key = api_key()
     raw_dir = ROOT / "data" / "raw" / "public_data"
     raw_dir.mkdir(parents=True, exist_ok=True)
 
-    for slug, target in TARGETS.items():
-        payload = get_profile(target["name"], key)
-        matches = [
-            item for item in items_from(payload)
-            if str(item.get("fssCorpUnqNo", "")).strip() == target["fss_corp_code"]
-        ]
-        if not matches:
-            raise SystemExit(f"{target['name']} 검색 결과에서 지정 DART 고유번호를 확인하지 못했습니다.")
+    for target in load_targets():
+        slug = target["slug"]
+        config_target = next(t for t in json.loads(TARGETS_FILE.read_text(encoding="utf-8"))["targets"] if t["brand_name"] == target["name"])
+        queries = list(dict.fromkeys([target["name"], config_target.get("legal_name", ""), *config_target.get("aliases", [])]))
+        candidates: list[dict[str, Any]] = []
+        matched_payload: dict[str, Any] | None = None
+        matched_count = 0
+        for query in (q for q in queries if q):
+            try:
+                payload = get_profile(query, key)
+            except RuntimeError as exc:
+                candidates.append({"query": query, "error": str(exc)})
+                continue
+            items = items_from(payload)
+            candidates.extend({"query": query, "item": item} for item in items)
+            matches = [item for item in items if normalized_corp_code(item.get("fssCorpUnqNo")) == normalized_corp_code(target["fss_corp_code"])]
+            if matches:
+                matched_payload = payload
+                matched_count = len(matches)
+                break
 
-        raw_path = raw_dir / f"fsc_corp_outline_{slug}.json"
-        raw_path.write_text(json.dumps(payload, ensure_ascii=False, indent=2), encoding="utf-8")
-        print(
-            f"{target['name']}: 후보 {len(items_from(payload))}건, "
-            f"지정 법인 일치 {len(matches)}건 → {raw_path.relative_to(ROOT)}"
-        )
+        if matched_payload is not None:
+            raw_path = raw_dir / f"fsc_corp_outline_{slug}.json"
+            matched_payload["_matched_query"] = query
+            raw_path.write_text(json.dumps(matched_payload, ensure_ascii=False, indent=2), encoding="utf-8")
+            print(f"{target['name']}: 검색 후보 {len(items_from(matched_payload))}건, 지정 법인 일치 {matched_count}건 → {raw_path.relative_to(ROOT)}")
+        else:
+            raw_path = raw_dir / f"fsc_corp_candidates_{slug}.json"
+            raw_path.write_text(json.dumps({"target": target, "queries": candidates}, ensure_ascii=False, indent=2), encoding="utf-8")
+            print(f"{target['name']}: 지정 DART 고유번호와 일치하는 금융위 결과 없음; 후보 원응답 저장 → {raw_path.relative_to(ROOT)}")
 
 
 if __name__ == "__main__":

@@ -2,6 +2,7 @@
   "targets": [
     {
       "brand_name": "이니스프리",
+      "company_id": "COMPANY-INNISFREE",
       "collector": "suyeon",
       "aliases": ["이니스프리", "주식회사 이니스프리", "(주)이니스프리", "INNISFREE"],
       "legal_name": "(주)이니스프리",
@@ -9,10 +10,51 @@
     },
     {
       "brand_name": "에스쁘아",
+      "company_id": "COMPANY-ESPOIR",
       "collector": "suyeon",
       "aliases": ["에스쁘아", "주식회사 에스쁘아", "(주)에스쁘아", "ESPOIR"],
       "legal_name": "주식회사 에스쁘아",
       "corp_code": "01061150"
+    },
+    {
+      "brand_name": "아모레퍼시픽",
+      "company_id": "COMPANY-AMOREPACIFIC",
+      "collector": "anna",
+      "aliases": ["아모레퍼시픽", "주식회사 아모레퍼시픽", "(주)아모레퍼시픽", "AMOREPACIFIC"],
+      "legal_name": "주식회사 아모레퍼시픽",
+      "corp_code": "00583424"
+    },
+    {
+      "brand_name": "에뛰드",
+      "company_id": "COMPANY-ETUDE",
+      "collector": "anna",
+      "aliases": ["에뛰드", "주식회사 에뛰드", "(주)에뛰드", "ETUDE"],
+      "legal_name": "주식회사 에뛰드",
+      "corp_code": "00183808"
+    },
+    {
+      "brand_name": "퍼시픽테크",
+      "company_id": "COMPANY-PACIFICTECH",
+      "collector": "seonghyeon",
+      "aliases": ["퍼시픽테크", "주식회사 퍼시픽테크", "(주)퍼시픽테크", "PACIFICTECH"],
+      "legal_name": "주식회사 퍼시픽테크",
+      "corp_code": "01784251"
+    },
+    {
+      "brand_name": "아모스프로페셔널",
+      "company_id": "COMPANY-AMOSPROFESSIONAL",
+      "collector": "seonghyeon",
+      "aliases": ["아모스프로페셔널", "주식회사 아모스프로페셔널", "(주)아모스프로페셔널", "AMOS PROFESSIONAL"],
+      "legal_name": "주식회사 아모스프로페셔널",
+      "corp_code": "00144456"
+    },
+    {
+      "brand_name": "코스알엑스",
+      "company_id": "COMPANY-COSRX",
+      "collector": "seonghyeon",
+      "aliases": ["코스알엑스", "주식회사 코스알엑스", "(주)코스알엑스", "COSRX"],
+      "legal_name": "주식회사 코스알엑스",
+      "corp_code": "01364491"
     }
   ]
 }
