@@ -1,0 +1,23 @@
+{
+  "model": "gpt-6-luna",
+  "requested_chunks": 1033,
+  "completed_chunks_total": 1033,
+  "relations_total": 5540,
+  "relations_after_exact_deduplication": 4977,
+  "relations_with_located_evidence_after_deduplication": 4881,
+  "relations_needing_evidence_review_after_deduplication": 96,
+  "normalized_entities_total": 1038,
+  "relations_with_located_evidence": 5438,
+  "errors_this_run": 0,
+  "unresolved_error_chunks": 0,
+  "estimated_cost_usd_total": 0.465585,
+  "max_cost_usd": 1.75,
+  "candidate_file": "data/processed/suyeon/openai_extraction_candidates.jsonl",
+  "normalized_entities_file": "data/processed/suyeon/openai_extraction_entities_normalized.jsonl",
+  "deduped_relations_file": "data/processed/suyeon/openai_extraction_relations_deduped.jsonl",
+  "supported_relations_file": "data/processed/suyeon/openai_extraction_relations_with_evidence.jsonl",
+  "review_relations_file": "data/processed/suyeon/openai_extraction_relations_needs_review.jsonl",
+  "errors_file": "data/processed/suyeon/openai_extraction_errors.jsonl",
+  "loaded_into_collected_jsonl_or_neo4j": false,
+  "report_file": "data/processed/suyeon/OPENAI_EXTRACTION_REPORT.md"
+}
