@@ -15,5 +15,6 @@ wheels/
 !.env.example
 
 # Local data and OS metadata
-private_data/
+private_data/*
+!private_data/*.ipynb
 .DS_Store
