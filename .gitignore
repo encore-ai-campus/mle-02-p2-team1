@@ -13,3 +13,7 @@ wheels/
 .env
 .env.*
 !.env.example
+
+# Local data and OS metadata
+private_data/
+.DS_Store
