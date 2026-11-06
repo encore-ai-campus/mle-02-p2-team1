@@ -17,4 +17,6 @@ wheels/
 # Local data and OS metadata
 private_data/*
 !private_data/*.ipynb
+data_code/*
+!data_code/*.ipynb
 .DS_Store
