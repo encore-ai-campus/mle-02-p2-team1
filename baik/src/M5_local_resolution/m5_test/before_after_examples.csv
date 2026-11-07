@@ -1,0 +1,4 @@
+﻿chunk_id,local_id,original_type,original_name,mention_id,representative_id,resolution_status,previous_output_entity_id,previous_output_status
+NEWS-23178d84642bd6c9-C00001,E1,Company,아모레퍼시픽,MENTION-2973367c788d29ac4d3f45e9,COMPANY-AMOREPACIFIC,기존_잠정_검토필요,COMPANY-AMOREPACIFIC,잠정_검토필요
+NEWS-23178d84642bd6c9-C00001,E2,Event,2026 국회 입법박람회,MENTION-fbb85dce8f8b4af03cbbb5ff,M5-EVENT-2026-ASSEMBLY-EXPO,기존_잠정_검토필요,M5-EVENT-2026-ASSEMBLY-EXPO,잠정_검토필요
+NEWS-23178d84642bd6c9-C00001,E3,Place,국회 중앙잔디광장,MENTION-69cc30c580efe6e3f45b2e75,M5-PLACE-ASSEMBLY-LAWN,기존_잠정_검토필요,M5-PLACE-ASSEMBLY-LAWN,잠정_검토필요
