@@ -1,0 +1,10 @@
+지분_보유자,지분_대상_회사,지분율,단위,기준일,상태,원래_표현,근거_기록_수,관계_ID
+서경배,아모레퍼시픽홀딩스,54.97,%,null,unknown,54.97%,1,REL-2f6b6c96b0c0f215eac303df02385294c6ac9e0ff53be0b2cfb90b3e39fdbbc6
+서경배,아모레퍼시픽홀딩스,50.28,%,null,unknown,최대주주 지분,1,REL-43cd21e910fd115f0a6f08cd63f8c455b281da9bc766709c66fc2108f65e73ba
+서경배,아모레퍼시픽홀딩스,56,%,null,unknown,56% 이상,1,REL-5200cdc5e4e4503ca2ad75ef398837a4d5f3f3fa3413c80ab4f116bf1b0b4809
+서경배,아모레퍼시픽홀딩스,57.12,%,null,unknown,null,1,REL-7e2b31c8cec5b4b3ef6936bda906c0b7a7a28d80b4ef84742c6c7010f35b6c05
+서경배,아모레퍼시픽홀딩스,56.39,%,null,unknown,null,1,REL-9d69da49f64e640ecc9c7ba2dce7784efa9a5851d483d5e46b36d6e7d270c35a
+서경배,아모레퍼시픽홀딩스,57.12,%,null,unknown,보통주 지분율,1,REL-cc4fd6eafa114d841eb199161741dd655aa15a51689d83d5376f130beffbad9a
+서경배,아모레퍼시픽홀딩스,11.65,%,null,unknown,올해 3월 말 기준 종류주 지분,1,REL-e2998061ffb20ecd52047859bc90df4b25ade601c4495ca262630f4f63ad2b7d
+아모레퍼시픽홀딩스,이니스프리,null,null,null,unknown,null,1,REL-7f54f1e62f21d697b2015e5134f00fb607ead80f7fca76d5a83fc03c0237f668
+아모레퍼시픽홀딩스,이니스프리,null,null,null,unknown,지분 대부분,1,REL-7f75a3c367177fb19717b503ad649406fcbe2de4857547e32e06ed32e7cbd559

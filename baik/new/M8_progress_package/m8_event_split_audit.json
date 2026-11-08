@@ -1,0 +1,285 @@
+{
+  "correction": "M8_EVENT_SPLIT_001",
+  "input_sha256": "b5672d880c7a941fd02760f3c8cb48bbf036fb41fcd47d0b617549b816855f35",
+  "old_entity_id": "EVENT-RULE-c54dfcd323152a767b51",
+  "groups": [
+    {
+      "key": "2024",
+      "entity_id": "EVENT-M8-2024-JEJU-GREEN-AWARDS",
+      "name": "2024 제주 그린어워드 시상식",
+      "chunks": [
+        "NEWS-4a5ceaf475a9e95d-C00001",
+        "NEWS-10ab280be958bd7d-C00001"
+      ],
+      "old_mention_ids": [
+        "MENTION-ee4a321179116bbef3741caf",
+        "MENTION-9b3a3e58ed8a4aa3be6fda9b"
+      ]
+    },
+    {
+      "key": "2025",
+      "entity_id": "EVENT-M8-2025-JEJU-GREEN-AWARDS",
+      "name": "2025 제주 그린어워드 시상식",
+      "chunks": [
+        "NEWS-9935a01d1eed55f8-C00001"
+      ],
+      "old_mention_ids": [
+        "MENTION-49af8a9fd1f0ec7238ffef64"
+      ]
+    },
+    {
+      "key": "2026",
+      "entity_id": "EVENT-M8-2026-KAS-BRAND-AWARDS",
+      "name": "한국광고학회 2026 올해의 브랜드상 시상식",
+      "chunks": [
+        "NEWS-b1153bd4291d51f7-C00001",
+        "NEWS-5e799eb705740d49-C00001",
+        "NEWS-2393422a77ceee94-C00001",
+        "NEWS-b7f8133d03f2528c-C00001",
+        "NEWS-3c5234422dfa5279-C00001",
+        "NEWS-3b21321e80d0a5d0-C00001",
+        "NEWS-3843a7d236eacb14-C00001"
+      ],
+      "old_mention_ids": [
+        "MENTION-41227f454325b58ff684d5e1",
+        "MENTION-ab6be59c00c98753c4394a2e",
+        "MENTION-cff130e2aaf7d05978c4cbd9",
+        "MENTION-20adcd632ea9032892a281df",
+        "MENTION-f9267ed7bda7d7c562aaf8f8",
+        "MENTION-6e028263bf8b754394e9f573",
+        "MENTION-c077d530feffa7fca55a59b3"
+      ]
+    }
+  ],
+  "relations": [
+    {
+      "relation_id": "NEWS-b1153bd4291d51f7-C00001:R0002",
+      "side": "subject",
+      "before_id": "EVENT-RULE-c54dfcd323152a767b51",
+      "after_id": "EVENT-M8-2026-KAS-BRAND-AWARDS",
+      "original_mention_id": "MENTION-41227f454325b58ff684d5e1",
+      "document_id": "NEWS-b1153bd4291d51f7",
+      "chunk_id": "NEWS-b1153bd4291d51f7-C00001",
+      "event_group": "2026"
+    },
+    {
+      "relation_id": "NEWS-5e799eb705740d49-C00001:R0005",
+      "side": "subject",
+      "before_id": "EVENT-RULE-c54dfcd323152a767b51",
+      "after_id": "EVENT-M8-2026-KAS-BRAND-AWARDS",
+      "original_mention_id": "MENTION-ab6be59c00c98753c4394a2e",
+      "document_id": "NEWS-5e799eb705740d49",
+      "chunk_id": "NEWS-5e799eb705740d49-C00001",
+      "event_group": "2026"
+    },
+    {
+      "relation_id": "NEWS-2393422a77ceee94-C00001:R0006",
+      "side": "subject",
+      "before_id": "EVENT-RULE-c54dfcd323152a767b51",
+      "after_id": "EVENT-M8-2026-KAS-BRAND-AWARDS",
+      "original_mention_id": "MENTION-cff130e2aaf7d05978c4cbd9",
+      "document_id": "NEWS-2393422a77ceee94",
+      "chunk_id": "NEWS-2393422a77ceee94-C00001",
+      "event_group": "2026"
+    },
+    {
+      "relation_id": "NEWS-b7f8133d03f2528c-C00001:R0002",
+      "side": "subject",
+      "before_id": "EVENT-RULE-c54dfcd323152a767b51",
+      "after_id": "EVENT-M8-2026-KAS-BRAND-AWARDS",
+      "original_mention_id": "MENTION-20adcd632ea9032892a281df",
+      "document_id": "NEWS-b7f8133d03f2528c",
+      "chunk_id": "NEWS-b7f8133d03f2528c-C00001",
+      "event_group": "2026"
+    },
+    {
+      "relation_id": "NEWS-3c5234422dfa5279-C00001:R0004",
+      "side": "subject",
+      "before_id": "EVENT-RULE-c54dfcd323152a767b51",
+      "after_id": "EVENT-M8-2026-KAS-BRAND-AWARDS",
+      "original_mention_id": "MENTION-f9267ed7bda7d7c562aaf8f8",
+      "document_id": "NEWS-3c5234422dfa5279",
+      "chunk_id": "NEWS-3c5234422dfa5279-C00001",
+      "event_group": "2026"
+    },
+    {
+      "relation_id": "NEWS-3b21321e80d0a5d0-C00001:R0002",
+      "side": "subject",
+      "before_id": "EVENT-RULE-c54dfcd323152a767b51",
+      "after_id": "EVENT-M8-2026-KAS-BRAND-AWARDS",
+      "original_mention_id": "MENTION-6e028263bf8b754394e9f573",
+      "document_id": "NEWS-3b21321e80d0a5d0",
+      "chunk_id": "NEWS-3b21321e80d0a5d0-C00001",
+      "event_group": "2026"
+    },
+    {
+      "relation_id": "NEWS-3843a7d236eacb14-C00001:R0006",
+      "side": "subject",
+      "before_id": "EVENT-RULE-c54dfcd323152a767b51",
+      "after_id": "EVENT-M8-2026-KAS-BRAND-AWARDS",
+      "original_mention_id": "MENTION-c077d530feffa7fca55a59b3",
+      "document_id": "NEWS-3843a7d236eacb14",
+      "chunk_id": "NEWS-3843a7d236eacb14-C00001",
+      "event_group": "2026"
+    },
+    {
+      "relation_id": "NEWS-4a5ceaf475a9e95d-C00001:R0003",
+      "side": "subject",
+      "before_id": "EVENT-RULE-c54dfcd323152a767b51",
+      "after_id": "EVENT-M8-2024-JEJU-GREEN-AWARDS",
+      "original_mention_id": "MENTION-ee4a321179116bbef3741caf",
+      "document_id": "NEWS-4a5ceaf475a9e95d",
+      "chunk_id": "NEWS-4a5ceaf475a9e95d-C00001",
+      "event_group": "2024"
+    },
+    {
+      "relation_id": "NEWS-10ab280be958bd7d-C00001:R0002",
+      "side": "object",
+      "before_id": "EVENT-RULE-c54dfcd323152a767b51",
+      "after_id": "EVENT-M8-2024-JEJU-GREEN-AWARDS",
+      "original_mention_id": "MENTION-9b3a3e58ed8a4aa3be6fda9b",
+      "document_id": "NEWS-10ab280be958bd7d",
+      "chunk_id": "NEWS-10ab280be958bd7d-C00001",
+      "event_group": "2024"
+    },
+    {
+      "relation_id": "NEWS-10ab280be958bd7d-C00001:R0003",
+      "side": "subject",
+      "before_id": "EVENT-RULE-c54dfcd323152a767b51",
+      "after_id": "EVENT-M8-2024-JEJU-GREEN-AWARDS",
+      "original_mention_id": "MENTION-9b3a3e58ed8a4aa3be6fda9b",
+      "document_id": "NEWS-10ab280be958bd7d",
+      "chunk_id": "NEWS-10ab280be958bd7d-C00001",
+      "event_group": "2024"
+    },
+    {
+      "relation_id": "NEWS-9935a01d1eed55f8-C00001:R0003",
+      "side": "subject",
+      "before_id": "EVENT-RULE-c54dfcd323152a767b51",
+      "after_id": "EVENT-M8-2025-JEJU-GREEN-AWARDS",
+      "original_mention_id": "MENTION-49af8a9fd1f0ec7238ffef64",
+      "document_id": "NEWS-9935a01d1eed55f8",
+      "chunk_id": "NEWS-9935a01d1eed55f8-C00001",
+      "event_group": "2025"
+    }
+  ],
+  "before_node": {
+    "entity_id": "EVENT-RULE-c54dfcd323152a767b51",
+    "type": "Event",
+    "name": "시상식",
+    "identity_status": "행사_동일표기_연도구분_잠정",
+    "old_ids": [
+      "MENTION-41227f454325b58ff684d5e1",
+      "MENTION-ab6be59c00c98753c4394a2e",
+      "MENTION-cff130e2aaf7d05978c4cbd9",
+      "MENTION-20adcd632ea9032892a281df",
+      "MENTION-f9267ed7bda7d7c562aaf8f8",
+      "MENTION-6e028263bf8b754394e9f573",
+      "MENTION-c077d530feffa7fca55a59b3",
+      "MENTION-ee4a321179116bbef3741caf",
+      "MENTION-9b3a3e58ed8a4aa3be6fda9b",
+      "MENTION-49af8a9fd1f0ec7238ffef64"
+    ],
+    "source_names": [
+      "시상식"
+    ],
+    "attribute_variants": [
+      {
+        "metric_name": null,
+        "value_number": null,
+        "unit": null,
+        "period_text": null,
+        "market": null,
+        "is_forecast": null
+      }
+    ],
+    "review_flags": []
+  },
+  "after_nodes": [
+    {
+      "entity_id": "EVENT-M8-2024-JEJU-GREEN-AWARDS",
+      "type": "Event",
+      "name": "2024 제주 그린어워드 시상식",
+      "identity_status": "M8_원문확인_행사분리_관계검토필요",
+      "old_ids": [
+        "MENTION-ee4a321179116bbef3741caf",
+        "MENTION-9b3a3e58ed8a4aa3be6fda9b"
+      ],
+      "source_names": [
+        "시상식"
+      ],
+      "attribute_variants": [
+        {
+          "metric_name": null,
+          "value_number": null,
+          "unit": null,
+          "period_text": null,
+          "market": null,
+          "is_forecast": null
+        }
+      ],
+      "review_flags": [
+        "M8_시상식_원문기준_분리",
+        "관계별_추가검토필요"
+      ]
+    },
+    {
+      "entity_id": "EVENT-M8-2025-JEJU-GREEN-AWARDS",
+      "type": "Event",
+      "name": "2025 제주 그린어워드 시상식",
+      "identity_status": "M8_원문확인_행사분리_관계검토필요",
+      "old_ids": [
+        "MENTION-49af8a9fd1f0ec7238ffef64"
+      ],
+      "source_names": [
+        "시상식"
+      ],
+      "attribute_variants": [
+        {
+          "metric_name": null,
+          "value_number": null,
+          "unit": null,
+          "period_text": null,
+          "market": null,
+          "is_forecast": null
+        }
+      ],
+      "review_flags": [
+        "M8_시상식_원문기준_분리",
+        "관계별_추가검토필요"
+      ]
+    },
+    {
+      "entity_id": "EVENT-M8-2026-KAS-BRAND-AWARDS",
+      "type": "Event",
+      "name": "한국광고학회 2026 올해의 브랜드상 시상식",
+      "identity_status": "M8_원문확인_행사분리_관계검토필요",
+      "old_ids": [
+        "MENTION-41227f454325b58ff684d5e1",
+        "MENTION-ab6be59c00c98753c4394a2e",
+        "MENTION-cff130e2aaf7d05978c4cbd9",
+        "MENTION-20adcd632ea9032892a281df",
+        "MENTION-f9267ed7bda7d7c562aaf8f8",
+        "MENTION-6e028263bf8b754394e9f573",
+        "MENTION-c077d530feffa7fca55a59b3"
+      ],
+      "source_names": [
+        "시상식"
+      ],
+      "attribute_variants": [
+        {
+          "metric_name": null,
+          "value_number": null,
+          "unit": null,
+          "period_text": null,
+          "market": null,
+          "is_forecast": null
+        }
+      ],
+      "review_flags": [
+        "M8_시상식_원문기준_분리",
+        "관계별_추가검토필요"
+      ]
+    }
+  ]
+}

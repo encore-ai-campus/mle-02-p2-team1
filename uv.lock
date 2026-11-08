@@ -45,12 +45,14 @@ source = { editable = "baik" }
 dependencies = [
     { name = "neo4j" },
     { name = "python-dotenv" },
+    { name = "requests" },
 ]
 
 [package.metadata]
 requires-dist = [
     { name = "neo4j", specifier = ">=6.4.1" },
     { name = "python-dotenv", specifier = ">=1.2.4" },
+    { name = "requests", specifier = ">=2.34.2" },
 ]
 
 [[package]]
