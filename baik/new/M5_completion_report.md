@@ -319,23 +319,19 @@ uv run python .\resolve_remaining.py `
 
 ### 7.4 관련 산출물
 
-- [초기 M5 정규화 코드 패키지](M5_local_resolution_package.zip): `resolve_m5.py`, 기업 식별 정보와 실행 안내.
-- [초기 M5 실행 결과](m5_output.zip): 최초 정규화 결과와 미결 언급·관계.
-- [인물 잠정 정규화 결과](M5_person_quick_result.zip): `resolve_persons.py`, 인물 전후 매핑과 결과.
-- [제품·행사·지표 처리 및 최종 범위 결과](M5_remaining_quick_result.zip): `resolve_remaining.py`, 최종 뉴스 관계·노드 후보·제외 목록.
+아래 파일들은 모두 M5 작업의 코드·중간 검토 자료·실행 결과다. 파일 이름을 선택하면 해당 파일을 열고 내려받을 수 있다.
 
-위 링크는 **이 보고서와 해당 ZIP을 GitHub의 같은 폴더에 올리는 경우** 동작하는 상대경로다. 파일을 다른 폴더에 보관한다면 실제 저장소 경로에 맞춰 링크를 수정한다. 결과에는 기사 인용과 URL이 포함되어 있으므로 저장소의 공개 범위와 원문 공유 가능 범위를 확인한다.
+| 산출물 | 내용과 역할 |
+| --- | --- |
+| [M5_local_resolution_package.zip](https://chatgpt.com/library?file_id=libfile_8ece6cdf43b881919531ed6897784adf&account_id=572db941-93e9-4f5f-a926-7a495084b755) | 초기 M5 정규화 코드 `resolve_m5.py`, 기업 식별 정보, 실행 안내, 전후 예시 |
+| [m5_output.zip](https://chatgpt.com/library?file_id=libfile_2f9ec4b22ce08191bf7e8635456b49ce&account_id=572db941-93e9-4f5f-a926-7a495084b755) | 초기 M5 정규화 실행 결과. 기존 연결과 미결 언급·관계 기록 |
+| [M5_person_review_771(1).zip](https://chatgpt.com/library?file_id=libfile_564b98460e908191a2346d19f427b19c&account_id=572db941-93e9-4f5f-a926-7a495084b755) | 인물 관계 771건의 1차 검토 분류와 반복 후보 목록. 인물 잠정 연결 이전의 중간 검토 자료이며, 코드 실행의 필수 입력은 아님 |
+| [M5_person_quick_result.zip](https://chatgpt.com/library?file_id=libfile_18e7985855d881919e6a46ef05501775&account_id=572db941-93e9-4f5f-a926-7a495084b755) | 인물 잠정 정규화 코드 `resolve_persons.py`, 인물 전후 매핑과 결과 |
+| [M5_remaining_quick_result.zip](https://chatgpt.com/library?file_id=libfile_3511d636fcb4819193699e80ce80e41e&account_id=572db941-93e9-4f5f-a926-7a495084b755) | 제품·행사·지표 처리 코드 `resolve_remaining.py`, 최종 뉴스 관계·노드 후보와 제외 목록 |
 
-#### 개인 보관 파일 다운로드
+`M5_person_review_771(1).zip`과 `M5_person_quick_result.zip`은 각각 **잠정 연결 전 검토 자료**와 **잠정 연결 후 코드·결과**이므로 서로 다른 파일이다.
 
-아래는 GitHub에 ZIP을 올리지 않았더라도 **파일에 접근 권한이 있는 계정에서** 열고 내려받을 수 있는 별도 링크다. GitHub 상대경로 링크와 달리, 팀원이나 강사님은 계정·공유 권한에 따라 열지 못할 수 있다. 팀 전체에서 사용하려면 해당 ZIP을 GitHub 또는 팀 공유 공간에도 올려야 한다.
-
-| 파일 | 다운로드 | 용도 |
-| --- | --- | --- |
-| `M5_local_resolution_package.zip` | [초기 정규화 코드 패키지 다운로드](https://chatgpt.com/library?file_id=libfile_8ece6cdf43b881919531ed6897784adf&account_id=572db941-93e9-4f5f-a926-7a495084b755) | 초기 정규화 코드·기업 식별 정보·실행 안내·전후 예시 |
-| `M5_person_review_771(1).zip` | [인물 관계 1차 검토 자료 다운로드](https://chatgpt.com/library?file_id=libfile_564b98460e908191a2346d19f427b19c&account_id=572db941-93e9-4f5f-a926-7a495084b755) | 인물 관계 771건의 분류와 반복 후보 목록. 잠정 연결 이전의 중간 검토 자료로 정규화 실행의 필수 입력은 아님 |
-
-두 번째 ZIP은 이후 만든 `M5_person_quick_result.zip`과 다른 파일이다. 후자는 인물 잠정 정규화 코드와 결과를 담는다. 파일을 PC에서 삭제하기 전에 위 링크에서 실제로 다운로드할 수 있는지 확인한다.
+> **파일 접근:** 위 링크는 각 파일이 보관된 ChatGPT 파일 링크다. PC의 파일을 삭제하기 전에 로그인한 상태에서 실제로 열고 내려받을 수 있는지 확인한다. GitHub에 보고서를 올려도 이 파일이 GitHub에 자동으로 업로드되거나 팀원에게 접근 권한이 생기지는 않는다. 팀원과 강사님도 보아야 한다면 파일을 GitHub 또는 팀 공유 공간에 별도로 올리고 그 경로로 링크를 바꾸거나 필요한 공유 권한을 부여한다. 결과에는 기사 인용과 URL이 포함되므로 공유 범위도 확인한다.
 
 ## 8. 검증 결과와 한계
 
