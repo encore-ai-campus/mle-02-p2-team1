@@ -3,7 +3,7 @@ import json
 import requests
 
 # 1. 환경 설정 (본인의 API Key를 입력하세요)
-API_KEY = "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"
+API_KEY=""
 URL = "https://openai.com"
 
 headers = {
