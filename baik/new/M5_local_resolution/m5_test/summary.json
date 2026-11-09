@@ -1,0 +1,43 @@
+{
+  "m4_input_status_counts": {
+    "success": 4757,
+    "failed": 13,
+    "pending": 2108,
+    "empty": 0
+  },
+  "mode": "시험_일부청크",
+  "news_chunks_processed": 5,
+  "news_mentions": 9,
+  "canonical_nodes": 22,
+  "news_nodes": 3,
+  "unresolved_mentions": 0,
+  "previous_m5_mentions_reused": 9,
+  "news_relations": 5,
+  "review_mentions": 9,
+  "reviewed_mentions": 0,
+  "structured_disclosure_relations": 28,
+  "news_relations_by_status": {
+    "기존자동또는잠정연결_검토필요": 5
+  },
+  "disclosure_dates": {
+    "2025-12-31": 7,
+    "2026-03-31": 7
+  },
+  "inputs": {
+    "m4": "M4_news_extraction_4757.zip",
+    "companies": "companies.jsonl",
+    "companies_sha256": "30007a42d5e2c78660af4ec1f16fe0118d16f6db179860f8593c338b5ec9beb2",
+    "disclosure": "ownership_disclosure_M1_M5.zip",
+    "decisions": null,
+    "previous_m5": "M5_batch_final.zip",
+    "m4_sha256": "7ddd55d2ff36640d99d82cfe78bafce4981a1414e05418fd4de814c47ad7a3a0",
+    "disclosure_sha256": "f5a0a9db1429a66987dbe1ec36c3c9bba64ea7b617c35a4d1e3c50392bbc8bc3",
+    "previous_m5_sha256": "6ad5c57dd3918d251eb4f25a9af21088379029d48fc2b5701b2e456eb6cb0c56"
+  },
+  "warnings": [
+    "뉴스 개체의 이름 일치만으로 자동 병합하지 않음",
+    "관계의 원문 포함 여부는 의미·사실 검증이 아님",
+    "뉴스 미결 개체와 관계는 별도 검토 필요",
+    "M6 로더 형식에 맞춘 매핑·적재는 이 코드의 범위 밖"
+  ]
+}

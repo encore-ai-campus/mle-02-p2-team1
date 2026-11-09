@@ -28,3 +28,4 @@ data/processed/*.jsonl
 # The legacy web entrypoint serves this checked-in static page.
 !connect-ui/dist/
 !connect-ui/dist/index.html
+connect-ui/.openai/

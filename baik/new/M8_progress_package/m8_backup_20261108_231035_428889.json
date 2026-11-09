@@ -1,0 +1,221 @@
+{
+  "dataset_id": "brian_m6_20261108_v1",
+  "created_at_utc": "2026-11-08T14:10:35.416882+00:00",
+  "before_fingerprint": "305f574aca152a61b1ad89ef36a69c0c9eb2bb6d4fb37b716f1a13bd91b1838b",
+  "after_fingerprint": "4460e3c01582c636d13fbf6de89640e7b7a9338637527e37945f122607b62493",
+  "nodes": [
+    {
+      "uid": "brian_m6_20261108_v1|EVENT-RULE-c54dfcd323152a767b51",
+      "input_hash": "305f574aca152a61b1ad89ef36a69c0c9eb2bb6d4fb37b716f1a13bd91b1838b",
+      "labels": [
+        "B_Event",
+        "B_M6Entity"
+      ],
+      "properties": {
+        "uid": "brian_m6_20261108_v1|EVENT-RULE-c54dfcd323152a767b51",
+        "input_hash": "305f574aca152a61b1ad89ef36a69c0c9eb2bb6d4fb37b716f1a13bd91b1838b",
+        "m5_record_json": "{\"attribute_variants\":[{\"is_forecast\":null,\"market\":null,\"metric_name\":null,\"period_text\":null,\"unit\":null,\"value_number\":null}],\"entity_id\":\"EVENT-RULE-c54dfcd323152a767b51\",\"identity_status\":\"행사_동일표기_연도구분_잠정\",\"name\":\"시상식\",\"old_ids\":[\"MENTION-41227f454325b58ff684d5e1\",\"MENTION-ab6be59c00c98753c4394a2e\",\"MENTION-cff130e2aaf7d05978c4cbd9\",\"MENTION-20adcd632ea9032892a281df\",\"MENTION-f9267ed7bda7d7c562aaf8f8\",\"MENTION-6e028263bf8b754394e9f573\",\"MENTION-c077d530feffa7fca55a59b3\",\"MENTION-ee4a321179116bbef3741caf\",\"MENTION-9b3a3e58ed8a4aa3be6fda9b\",\"MENTION-49af8a9fd1f0ec7238ffef64\"],\"review_flags\":[],\"source_names\":[\"시상식\"],\"type\":\"Event\"}",
+        "entity_type": "Event",
+        "identity_status": "행사_동일표기_연도구분_잠정",
+        "dataset_id": "brian_m6_20261108_v1",
+        "name": "시상식",
+        "entity_id": "EVENT-RULE-c54dfcd323152a767b51"
+      }
+    }
+  ],
+  "relationships": [
+    {
+      "uid": "brian_m6_20261108_v1|REL-19b1076d84314e58743923552d8f182575f04504940a97071b3ef4b090ba8f3c",
+      "input_hash": "305f574aca152a61b1ad89ef36a69c0c9eb2bb6d4fb37b716f1a13bd91b1838b",
+      "sources_json": "[{\"attributes\":{\"as_of_date\":null,\"event_date\":null,\"status\":\"unknown\",\"unit\":null,\"valid_from\":null,\"valid_to\":null,\"value_number\":null,\"value_text\":null},\"evidence\":{\"chunk_id\":\"NEWS-4a5ceaf475a9e95d-C00001\",\"document_id\":\"NEWS-4a5ceaf475a9e95d\",\"quote\":\"시상식은 오는 22일 라마다프라자 제주호텔 8층 탐라홀에서 열린다.\",\"source_metadata\":{\"char_end\":973,\"char_start\":0,\"company_ids\":[\"COMPANY-INNISFREE\"],\"published_at\":\"2024-11-17T09:06:00.000Z\",\"source_row\":1923,\"source_url\":\"http://www.jejunews.com/news/articleView.html?idxno=2214787\",\"title\":\"이니스프리 모음재단, 2024 제주 그린어워드 수상자 발표\"}},\"object_id\":\"AUTO-40f135695e7965dc75995d40\",\"object_resolution\":\"기존_자동연결_미검토\",\"original_object_id\":\"AUTO-40f135695e7965dc75995d40\",\"original_object_resolution\":\"기존_자동연결_미검토\",\"original_subject_id\":\"MENTION-ee4a321179116bbef3741caf\",\"original_subject_resolution\":\"미결_원문검토필요\",\"predicate\":\"EVENT_IN_PLACE\",\"relation_id\":\"NEWS-4a5ceaf475a9e95d-C00001:R0003\",\"review_status\":\"규칙기반연결_관계의미검토필요\",\"scope\":\"기존_한쪽미결_Event\",\"source_kind\":\"news\",\"subject_id\":\"EVENT-RULE-c54dfcd323152a767b51\",\"subject_resolution\":\"행사_동일표기_연도구분_잠정\"}]",
+      "source_count": 1,
+      "start_uid": "brian_m6_20261108_v1|EVENT-RULE-c54dfcd323152a767b51",
+      "end_uid": "brian_m6_20261108_v1|AUTO-40f135695e7965dc75995d40",
+      "relation_type": "B_EVENT_IN_PLACE",
+      "properties": {
+        "evidence_count": 1,
+        "document_ids": [
+          "NEWS-4a5ceaf475a9e95d"
+        ],
+        "input_hash": "305f574aca152a61b1ad89ef36a69c0c9eb2bb6d4fb37b716f1a13bd91b1838b",
+        "disclosure_notes_json": "{}",
+        "source_count": 1,
+        "attributes_json": "{\"as_of_date\":null,\"event_date\":null,\"status\":\"unknown\",\"unit\":null,\"valid_from\":null,\"valid_to\":null,\"value_number\":null,\"value_text\":null}",
+        "dataset_id": "brian_m6_20261108_v1",
+        "source_relation_ids": [
+          "NEWS-4a5ceaf475a9e95d-C00001:R0003"
+        ],
+        "relation_id": "REL-19b1076d84314e58743923552d8f182575f04504940a97071b3ef4b090ba8f3c",
+        "uid": "brian_m6_20261108_v1|REL-19b1076d84314e58743923552d8f182575f04504940a97071b3ef4b090ba8f3c",
+        "predicate": "EVENT_IN_PLACE",
+        "evidence_quotes": [
+          "시상식은 오는 22일 라마다프라자 제주호텔 8층 탐라홀에서 열린다."
+        ],
+        "sources_json": "[{\"attributes\":{\"as_of_date\":null,\"event_date\":null,\"status\":\"unknown\",\"unit\":null,\"valid_from\":null,\"valid_to\":null,\"value_number\":null,\"value_text\":null},\"evidence\":{\"chunk_id\":\"NEWS-4a5ceaf475a9e95d-C00001\",\"document_id\":\"NEWS-4a5ceaf475a9e95d\",\"quote\":\"시상식은 오는 22일 라마다프라자 제주호텔 8층 탐라홀에서 열린다.\",\"source_metadata\":{\"char_end\":973,\"char_start\":0,\"company_ids\":[\"COMPANY-INNISFREE\"],\"published_at\":\"2024-11-17T09:06:00.000Z\",\"source_row\":1923,\"source_url\":\"http://www.jejunews.com/news/articleView.html?idxno=2214787\",\"title\":\"이니스프리 모음재단, 2024 제주 그린어워드 수상자 발표\"}},\"object_id\":\"AUTO-40f135695e7965dc75995d40\",\"object_resolution\":\"기존_자동연결_미검토\",\"original_object_id\":\"AUTO-40f135695e7965dc75995d40\",\"original_object_resolution\":\"기존_자동연결_미검토\",\"original_subject_id\":\"MENTION-ee4a321179116bbef3741caf\",\"original_subject_resolution\":\"미결_원문검토필요\",\"predicate\":\"EVENT_IN_PLACE\",\"relation_id\":\"NEWS-4a5ceaf475a9e95d-C00001:R0003\",\"review_status\":\"규칙기반연결_관계의미검토필요\",\"scope\":\"기존_한쪽미결_Event\",\"source_kind\":\"news\",\"subject_id\":\"EVENT-RULE-c54dfcd323152a767b51\",\"subject_resolution\":\"행사_동일표기_연도구분_잠정\"}]",
+        "source_urls": [
+          "http://www.jejunews.com/news/articleView.html?idxno=2214787"
+        ],
+        "status": "unknown"
+      }
+    },
+    {
+      "uid": "brian_m6_20261108_v1|REL-6c93cc779ebcdddd8a8d1359c0f53b88ab8842a1f34793908702ff8aa37ec81f",
+      "input_hash": "305f574aca152a61b1ad89ef36a69c0c9eb2bb6d4fb37b716f1a13bd91b1838b",
+      "sources_json": "[{\"attributes\":{\"as_of_date\":null,\"event_date\":null,\"status\":\"unknown\",\"unit\":null,\"valid_from\":null,\"valid_to\":null,\"value_number\":null,\"value_text\":null},\"evidence\":{\"chunk_id\":\"NEWS-10ab280be958bd7d-C00001\",\"document_id\":\"NEWS-10ab280be958bd7d\",\"quote\":\"이니스프리 모음재단은 이날 오후 라마다프라자제주호텔에서 시상식을 열어 성 원장과 정 본부장에게 각각 상패와 상금 500만원을 전달했다.\",\"source_metadata\":{\"char_end\":408,\"char_start\":0,\"company_ids\":[\"COMPANY-INNISFREE\"],\"published_at\":\"2024-11-22T06:30:00.000Z\",\"source_row\":1979,\"source_url\":\"https://www.yna.co.kr/view/AKR20241122109500056?input=1195m\",\"title\":\"'2024 제주 그린어워드' 수상자로 성범영·정용환 선정\"}},\"object_id\":\"AUTO-5a07a91ac7c37eb08601954a\",\"object_resolution\":\"기존_자동연결_미검토\",\"original_object_id\":\"AUTO-5a07a91ac7c37eb08601954a\",\"original_object_resolution\":\"기존_자동연결_미검토\",\"original_subject_id\":\"MENTION-9b3a3e58ed8a4aa3be6fda9b\",\"original_subject_resolution\":\"미결_원문검토필요\",\"predicate\":\"EVENT_IN_PLACE\",\"relation_id\":\"NEWS-10ab280be958bd7d-C00001:R0003\",\"review_status\":\"규칙기반연결_관계의미검토필요\",\"scope\":\"기존_한쪽미결_Event\",\"source_kind\":\"news\",\"subject_id\":\"EVENT-RULE-c54dfcd323152a767b51\",\"subject_resolution\":\"행사_동일표기_연도구분_잠정\"}]",
+      "source_count": 1,
+      "start_uid": "brian_m6_20261108_v1|EVENT-RULE-c54dfcd323152a767b51",
+      "end_uid": "brian_m6_20261108_v1|AUTO-5a07a91ac7c37eb08601954a",
+      "relation_type": "B_EVENT_IN_PLACE",
+      "properties": {
+        "evidence_count": 1,
+        "document_ids": [
+          "NEWS-10ab280be958bd7d"
+        ],
+        "input_hash": "305f574aca152a61b1ad89ef36a69c0c9eb2bb6d4fb37b716f1a13bd91b1838b",
+        "disclosure_notes_json": "{}",
+        "source_count": 1,
+        "attributes_json": "{\"as_of_date\":null,\"event_date\":null,\"status\":\"unknown\",\"unit\":null,\"valid_from\":null,\"valid_to\":null,\"value_number\":null,\"value_text\":null}",
+        "dataset_id": "brian_m6_20261108_v1",
+        "source_relation_ids": [
+          "NEWS-10ab280be958bd7d-C00001:R0003"
+        ],
+        "relation_id": "REL-6c93cc779ebcdddd8a8d1359c0f53b88ab8842a1f34793908702ff8aa37ec81f",
+        "uid": "brian_m6_20261108_v1|REL-6c93cc779ebcdddd8a8d1359c0f53b88ab8842a1f34793908702ff8aa37ec81f",
+        "predicate": "EVENT_IN_PLACE",
+        "evidence_quotes": [
+          "이니스프리 모음재단은 이날 오후 라마다프라자제주호텔에서 시상식을 열어 성 원장과 정 본부장에게 각각 상패와 상금 500만원을 전달했다."
+        ],
+        "sources_json": "[{\"attributes\":{\"as_of_date\":null,\"event_date\":null,\"status\":\"unknown\",\"unit\":null,\"valid_from\":null,\"valid_to\":null,\"value_number\":null,\"value_text\":null},\"evidence\":{\"chunk_id\":\"NEWS-10ab280be958bd7d-C00001\",\"document_id\":\"NEWS-10ab280be958bd7d\",\"quote\":\"이니스프리 모음재단은 이날 오후 라마다프라자제주호텔에서 시상식을 열어 성 원장과 정 본부장에게 각각 상패와 상금 500만원을 전달했다.\",\"source_metadata\":{\"char_end\":408,\"char_start\":0,\"company_ids\":[\"COMPANY-INNISFREE\"],\"published_at\":\"2024-11-22T06:30:00.000Z\",\"source_row\":1979,\"source_url\":\"https://www.yna.co.kr/view/AKR20241122109500056?input=1195m\",\"title\":\"'2024 제주 그린어워드' 수상자로 성범영·정용환 선정\"}},\"object_id\":\"AUTO-5a07a91ac7c37eb08601954a\",\"object_resolution\":\"기존_자동연결_미검토\",\"original_object_id\":\"AUTO-5a07a91ac7c37eb08601954a\",\"original_object_resolution\":\"기존_자동연결_미검토\",\"original_subject_id\":\"MENTION-9b3a3e58ed8a4aa3be6fda9b\",\"original_subject_resolution\":\"미결_원문검토필요\",\"predicate\":\"EVENT_IN_PLACE\",\"relation_id\":\"NEWS-10ab280be958bd7d-C00001:R0003\",\"review_status\":\"규칙기반연결_관계의미검토필요\",\"scope\":\"기존_한쪽미결_Event\",\"source_kind\":\"news\",\"subject_id\":\"EVENT-RULE-c54dfcd323152a767b51\",\"subject_resolution\":\"행사_동일표기_연도구분_잠정\"}]",
+        "source_urls": [
+          "https://www.yna.co.kr/view/AKR20241122109500056?input=1195m"
+        ],
+        "status": "unknown"
+      }
+    },
+    {
+      "uid": "brian_m6_20261108_v1|REL-f90c7c4822022cfd51a687d820dae6e67181de46398a2bbc2c9c7b9d0dcbee84",
+      "input_hash": "305f574aca152a61b1ad89ef36a69c0c9eb2bb6d4fb37b716f1a13bd91b1838b",
+      "sources_json": "[{\"attributes\":{\"as_of_date\":null,\"event_date\":null,\"status\":\"unknown\",\"unit\":null,\"valid_from\":null,\"valid_to\":null,\"value_number\":null,\"value_text\":null},\"evidence\":{\"chunk_id\":\"NEWS-2393422a77ceee94-C00001\",\"document_id\":\"NEWS-2393422a77ceee94\",\"quote\":\"에스트라는 한국광고학회가 선정한 '2026 올해의 브랜드상' 수상 브랜드에 이름을 올렸다고 30일 밝혔다. 시상식은 이날 부산 파라다이스호텔에서 열린다.\",\"source_metadata\":{\"char_end\":1123,\"char_start\":0,\"company_ids\":[\"COMPANY-AMOREPACIFIC\"],\"published_at\":\"2026-10-30T14:12:00+09:00\",\"source_row\":296,\"source_url\":\"https://www.womentimes.co.kr/news/articleView.html?idxno=107458\",\"title\":\"에스트라, 40년 피부과학의 결실...한국광고학회 브랜드상 수상\"}},\"object_id\":\"AUTO-9c150b9c080a626bcbaa5af7\",\"object_resolution\":\"기존_자동연결_미검토\",\"original_object_id\":\"AUTO-9c150b9c080a626bcbaa5af7\",\"original_object_resolution\":\"기존_자동연결_미검토\",\"original_subject_id\":\"MENTION-cff130e2aaf7d05978c4cbd9\",\"original_subject_resolution\":\"미결_원문검토필요\",\"predicate\":\"EVENT_IN_PLACE\",\"relation_id\":\"NEWS-2393422a77ceee94-C00001:R0006\",\"review_status\":\"규칙기반연결_관계의미검토필요\",\"scope\":\"기존_한쪽미결_Event\",\"source_kind\":\"news\",\"subject_id\":\"EVENT-RULE-c54dfcd323152a767b51\",\"subject_resolution\":\"행사_동일표기_연도구분_잠정\"},{\"attributes\":{\"as_of_date\":null,\"event_date\":null,\"status\":\"unknown\",\"unit\":null,\"valid_from\":null,\"valid_to\":null,\"value_number\":null,\"value_text\":null},\"evidence\":{\"chunk_id\":\"NEWS-3843a7d236eacb14-C00001\",\"document_id\":\"NEWS-3843a7d236eacb14\",\"quote\":\"아모레퍼시픽은 에스트라가 한국광고학회 ‘2026 올해의 브랜드상’ 수상 브랜드로 선정됐다고 30일 밝혔다. 시상식은 이날 부산 파라다이스호텔에서 열린다.\",\"source_metadata\":{\"char_end\":796,\"char_start\":0,\"company_ids\":[\"COMPANY-AMOREPACIFIC\"],\"published_at\":\"2026-10-30T09:50:00+09:00\",\"source_row\":335,\"source_url\":\"https://www.pinpointnews.co.kr/news/articleView.html?idxno=499940\",\"title\":\"아모레퍼시픽 에스트라, '올해의 브랜드상' 선정\"}},\"object_id\":\"AUTO-9c150b9c080a626bcbaa5af7\",\"object_resolution\":\"기존_자동연결_미검토\",\"original_object_id\":\"AUTO-9c150b9c080a626bcbaa5af7\",\"original_object_resolution\":\"기존_자동연결_미검토\",\"original_subject_id\":\"MENTION-c077d530feffa7fca55a59b3\",\"original_subject_resolution\":\"미결_원문검토필요\",\"predicate\":\"EVENT_IN_PLACE\",\"relation_id\":\"NEWS-3843a7d236eacb14-C00001:R0006\",\"review_status\":\"규칙기반연결_관계의미검토필요\",\"scope\":\"기존_한쪽미결_Event\",\"source_kind\":\"news\",\"subject_id\":\"EVENT-RULE-c54dfcd323152a767b51\",\"subject_resolution\":\"행사_동일표기_연도구분_잠정\"},{\"attributes\":{\"as_of_date\":null,\"event_date\":null,\"status\":\"unknown\",\"unit\":null,\"valid_from\":null,\"valid_to\":null,\"value_number\":null,\"value_text\":null},\"evidence\":{\"chunk_id\":\"NEWS-3b21321e80d0a5d0-C00001\",\"document_id\":\"NEWS-3b21321e80d0a5d0\",\"quote\":\"아모레퍼시픽의 정통 더마 브랜드 에스트라(AESTURA)가 한국광고학회가 선정한 '2026 올해의 브랜드상' 수상자로 선정됐다고 30일 밝혔다. 시상식은 이날 부산 파라다이스호텔에서 열린다.\",\"source_metadata\":{\"char_end\":2483,\"char_start\":0,\"company_ids\":[\"COMPANY-AMOREPACIFIC\"],\"published_at\":\"2026-10-30T10:30:00+09:00\",\"source_row\":325,\"source_url\":\"https://www.businessplus.kr/news/articleView.html?idxno=119006\",\"title\":\"[잘먹잘살+]에스트라·쿠팡로지스틱스서비스·카카오모빌리티·슈콤마보...\"}},\"object_id\":\"AUTO-9c150b9c080a626bcbaa5af7\",\"object_resolution\":\"기존_자동연결_미검토\",\"original_object_id\":\"AUTO-9c150b9c080a626bcbaa5af7\",\"original_object_resolution\":\"기존_자동연결_미검토\",\"original_subject_id\":\"MENTION-6e028263bf8b754394e9f573\",\"original_subject_resolution\":\"미결_원문검토필요\",\"predicate\":\"EVENT_IN_PLACE\",\"relation_id\":\"NEWS-3b21321e80d0a5d0-C00001:R0002\",\"review_status\":\"규칙기반연결_관계의미검토필요\",\"scope\":\"기존_한쪽미결_Event\",\"source_kind\":\"news\",\"subject_id\":\"EVENT-RULE-c54dfcd323152a767b51\",\"subject_resolution\":\"행사_동일표기_연도구분_잠정\"},{\"attributes\":{\"as_of_date\":null,\"event_date\":null,\"status\":\"unknown\",\"unit\":null,\"valid_from\":null,\"valid_to\":null,\"value_number\":null,\"value_text\":null},\"evidence\":{\"chunk_id\":\"NEWS-3c5234422dfa5279-C00001\",\"document_id\":\"NEWS-3c5234422dfa5279\",\"quote\":\"시상식은 30일 부산 파라다이스호텔에서 열린다.\",\"source_metadata\":{\"char_end\":875,\"char_start\":0,\"company_ids\":[\"COMPANY-AMOREPACIFIC\"],\"published_at\":\"2026-10-30T11:14:00+09:00\",\"source_row\":311,\"source_url\":\"https://www.lcnews.co.kr/news/articleView.html?idxno=210593\",\"title\":\"에스트라, 피부과학 기반 브랜드 활동으로 올해의 브랜드상\"}},\"object_id\":\"AUTO-9c150b9c080a626bcbaa5af7\",\"object_resolution\":\"기존_자동연결_미검토\",\"original_object_id\":\"AUTO-9c150b9c080a626bcbaa5af7\",\"original_object_resolution\":\"기존_자동연결_미검토\",\"original_subject_id\":\"MENTION-f9267ed7bda7d7c562aaf8f8\",\"original_subject_resolution\":\"미결_원문검토필요\",\"predicate\":\"EVENT_IN_PLACE\",\"relation_id\":\"NEWS-3c5234422dfa5279-C00001:R0004\",\"review_status\":\"규칙기반연결_관계의미검토필요\",\"scope\":\"기존_한쪽미결_Event\",\"source_kind\":\"news\",\"subject_id\":\"EVENT-RULE-c54dfcd323152a767b51\",\"subject_resolution\":\"행사_동일표기_연도구분_잠정\"},{\"attributes\":{\"as_of_date\":null,\"event_date\":null,\"status\":\"unknown\",\"unit\":null,\"valid_from\":null,\"valid_to\":null,\"value_number\":null,\"value_text\":null},\"evidence\":{\"chunk_id\":\"NEWS-5e799eb705740d49-C00001\",\"document_id\":\"NEWS-5e799eb705740d49\",\"quote\":\"아모레퍼시픽의 더마 브랜드 에스트라는 한국광고학회가 선정한 '2026 올해의 브랜드상' 수상자로 이름을 올렸다. 시상식은 이날 부산 파라다이스호텔에서 열리며, 총 6개 브랜드가 수상한다.\",\"source_metadata\":{\"char_end\":2169,\"char_start\":0,\"company_ids\":[\"COMPANY-AMOREPACIFIC\"],\"published_at\":\"2026-10-30T15:16:00+09:00\",\"source_row\":288,\"source_url\":\"https://www.moneystorm.kr/news/articleView.html?idxno=7876\",\"title\":\"[패션·뷰티 돋보기] 한샘, 만학도에 가구 110여 점 지원…에스트라 1,0...\"}},\"object_id\":\"AUTO-9c150b9c080a626bcbaa5af7\",\"object_resolution\":\"기존_자동연결_미검토\",\"original_object_id\":\"AUTO-9c150b9c080a626bcbaa5af7\",\"original_object_resolution\":\"기존_자동연결_미검토\",\"original_subject_id\":\"MENTION-ab6be59c00c98753c4394a2e\",\"original_subject_resolution\":\"미결_원문검토필요\",\"predicate\":\"EVENT_IN_PLACE\",\"relation_id\":\"NEWS-5e799eb705740d49-C00001:R0005\",\"review_status\":\"규칙기반연결_관계의미검토필요\",\"scope\":\"기존_한쪽미결_Event\",\"source_kind\":\"news\",\"subject_id\":\"EVENT-RULE-c54dfcd323152a767b51\",\"subject_resolution\":\"행사_동일표기_연도구분_잠정\"},{\"attributes\":{\"as_of_date\":null,\"event_date\":null,\"status\":\"unknown\",\"unit\":null,\"valid_from\":null,\"valid_to\":null,\"value_number\":null,\"value_text\":null},\"evidence\":{\"chunk_id\":\"NEWS-b1153bd4291d51f7-C00001\",\"document_id\":\"NEWS-b1153bd4291d51f7\",\"quote\":\"한국광고학회는 에스트라를 ‘2026 올해의 브랜드상' 수상 브랜드로 정했으며, 시상식은 30일 부산 파라다이스호텔에서 진행된다.\",\"source_metadata\":{\"char_end\":787,\"char_start\":0,\"company_ids\":[\"COMPANY-AMOREPACIFIC\"],\"published_at\":\"2026-10-30T21:50:00+09:00\",\"source_row\":259,\"source_url\":\"https://www.tournews21.com/news/articleView.html?idxno=147128\",\"title\":\"아모레퍼시픽 에스트라, 한국광고학회 '올해의 브랜드상' 받아… 피부과...\"}},\"object_id\":\"AUTO-9c150b9c080a626bcbaa5af7\",\"object_resolution\":\"기존_자동연결_미검토\",\"original_object_id\":\"AUTO-9c150b9c080a626bcbaa5af7\",\"original_object_resolution\":\"기존_자동연결_미검토\",\"original_subject_id\":\"MENTION-41227f454325b58ff684d5e1\",\"original_subject_resolution\":\"미결_원문검토필요\",\"predicate\":\"EVENT_IN_PLACE\",\"relation_id\":\"NEWS-b1153bd4291d51f7-C00001:R0002\",\"review_status\":\"규칙기반연결_관계의미검토필요\",\"scope\":\"기존_한쪽미결_Event\",\"source_kind\":\"news\",\"subject_id\":\"EVENT-RULE-c54dfcd323152a767b51\",\"subject_resolution\":\"행사_동일표기_연도구분_잠정\"},{\"attributes\":{\"as_of_date\":null,\"event_date\":null,\"status\":\"unknown\",\"unit\":null,\"valid_from\":null,\"valid_to\":null,\"value_number\":null,\"value_text\":null},\"evidence\":{\"chunk_id\":\"NEWS-b7f8133d03f2528c-C00001\",\"document_id\":\"NEWS-b7f8133d03f2528c\",\"quote\":\"시상식은 30일 부산 파라다이스호텔에서 열린다.\",\"source_metadata\":{\"char_end\":820,\"char_start\":0,\"company_ids\":[\"COMPANY-AMOREPACIFIC\"],\"published_at\":\"2026-10-30T12:52:00+09:00\",\"source_row\":305,\"source_url\":\"https://www.koreareport.co.kr/news/articleView.html?idxno=54132\",\"title\":\"아모레퍼시픽 에스트라, 한국광고학회 '올해의 브랜드상' 수상\"}},\"object_id\":\"AUTO-9c150b9c080a626bcbaa5af7\",\"object_resolution\":\"기존_자동연결_미검토\",\"original_object_id\":\"AUTO-9c150b9c080a626bcbaa5af7\",\"original_object_resolution\":\"기존_자동연결_미검토\",\"original_subject_id\":\"MENTION-20adcd632ea9032892a281df\",\"original_subject_resolution\":\"미결_원문검토필요\",\"predicate\":\"EVENT_IN_PLACE\",\"relation_id\":\"NEWS-b7f8133d03f2528c-C00001:R0002\",\"review_status\":\"규칙기반연결_관계의미검토필요\",\"scope\":\"기존_한쪽미결_Event\",\"source_kind\":\"news\",\"subject_id\":\"EVENT-RULE-c54dfcd323152a767b51\",\"subject_resolution\":\"행사_동일표기_연도구분_잠정\"}]",
+      "source_count": 7,
+      "start_uid": "brian_m6_20261108_v1|EVENT-RULE-c54dfcd323152a767b51",
+      "end_uid": "brian_m6_20261108_v1|AUTO-9c150b9c080a626bcbaa5af7",
+      "relation_type": "B_EVENT_IN_PLACE",
+      "properties": {
+        "evidence_count": 7,
+        "document_ids": [
+          "NEWS-2393422a77ceee94",
+          "NEWS-3843a7d236eacb14",
+          "NEWS-3b21321e80d0a5d0",
+          "NEWS-3c5234422dfa5279",
+          "NEWS-5e799eb705740d49",
+          "NEWS-b1153bd4291d51f7",
+          "NEWS-b7f8133d03f2528c"
+        ],
+        "input_hash": "305f574aca152a61b1ad89ef36a69c0c9eb2bb6d4fb37b716f1a13bd91b1838b",
+        "disclosure_notes_json": "{}",
+        "source_count": 7,
+        "attributes_json": "{\"as_of_date\":null,\"event_date\":null,\"status\":\"unknown\",\"unit\":null,\"valid_from\":null,\"valid_to\":null,\"value_number\":null,\"value_text\":null}",
+        "dataset_id": "brian_m6_20261108_v1",
+        "source_relation_ids": [
+          "NEWS-2393422a77ceee94-C00001:R0006",
+          "NEWS-3843a7d236eacb14-C00001:R0006",
+          "NEWS-3b21321e80d0a5d0-C00001:R0002",
+          "NEWS-3c5234422dfa5279-C00001:R0004",
+          "NEWS-5e799eb705740d49-C00001:R0005",
+          "NEWS-b1153bd4291d51f7-C00001:R0002",
+          "NEWS-b7f8133d03f2528c-C00001:R0002"
+        ],
+        "relation_id": "REL-f90c7c4822022cfd51a687d820dae6e67181de46398a2bbc2c9c7b9d0dcbee84",
+        "uid": "brian_m6_20261108_v1|REL-f90c7c4822022cfd51a687d820dae6e67181de46398a2bbc2c9c7b9d0dcbee84",
+        "predicate": "EVENT_IN_PLACE",
+        "evidence_quotes": [
+          "시상식은 30일 부산 파라다이스호텔에서 열린다.",
+          "아모레퍼시픽은 에스트라가 한국광고학회 ‘2026 올해의 브랜드상’ 수상 브랜드로 선정됐다고 30일 밝혔다. 시상식은 이날 부산 파라다이스호텔에서 열린다.",
+          "아모레퍼시픽의 더마 브랜드 에스트라는 한국광고학회가 선정한 '2026 올해의 브랜드상' 수상자로 이름을 올렸다. 시상식은 이날 부산 파라다이스호텔에서 열리며, 총 6개 브랜드가 수상한다.",
+          "아모레퍼시픽의 정통 더마 브랜드 에스트라(AESTURA)가 한국광고학회가 선정한 '2026 올해의 브랜드상' 수상자로 선정됐다고 30일 밝혔다. 시상식은 이날 부산 파라다이스호텔에서 열린다.",
+          "에스트라는 한국광고학회가 선정한 '2026 올해의 브랜드상' 수상 브랜드에 이름을 올렸다고 30일 밝혔다. 시상식은 이날 부산 파라다이스호텔에서 열린다.",
+          "한국광고학회는 에스트라를 ‘2026 올해의 브랜드상' 수상 브랜드로 정했으며, 시상식은 30일 부산 파라다이스호텔에서 진행된다."
+        ],
+        "sources_json": "[{\"attributes\":{\"as_of_date\":null,\"event_date\":null,\"status\":\"unknown\",\"unit\":null,\"valid_from\":null,\"valid_to\":null,\"value_number\":null,\"value_text\":null},\"evidence\":{\"chunk_id\":\"NEWS-2393422a77ceee94-C00001\",\"document_id\":\"NEWS-2393422a77ceee94\",\"quote\":\"에스트라는 한국광고학회가 선정한 '2026 올해의 브랜드상' 수상 브랜드에 이름을 올렸다고 30일 밝혔다. 시상식은 이날 부산 파라다이스호텔에서 열린다.\",\"source_metadata\":{\"char_end\":1123,\"char_start\":0,\"company_ids\":[\"COMPANY-AMOREPACIFIC\"],\"published_at\":\"2026-10-30T14:12:00+09:00\",\"source_row\":296,\"source_url\":\"https://www.womentimes.co.kr/news/articleView.html?idxno=107458\",\"title\":\"에스트라, 40년 피부과학의 결실...한국광고학회 브랜드상 수상\"}},\"object_id\":\"AUTO-9c150b9c080a626bcbaa5af7\",\"object_resolution\":\"기존_자동연결_미검토\",\"original_object_id\":\"AUTO-9c150b9c080a626bcbaa5af7\",\"original_object_resolution\":\"기존_자동연결_미검토\",\"original_subject_id\":\"MENTION-cff130e2aaf7d05978c4cbd9\",\"original_subject_resolution\":\"미결_원문검토필요\",\"predicate\":\"EVENT_IN_PLACE\",\"relation_id\":\"NEWS-2393422a77ceee94-C00001:R0006\",\"review_status\":\"규칙기반연결_관계의미검토필요\",\"scope\":\"기존_한쪽미결_Event\",\"source_kind\":\"news\",\"subject_id\":\"EVENT-RULE-c54dfcd323152a767b51\",\"subject_resolution\":\"행사_동일표기_연도구분_잠정\"},{\"attributes\":{\"as_of_date\":null,\"event_date\":null,\"status\":\"unknown\",\"unit\":null,\"valid_from\":null,\"valid_to\":null,\"value_number\":null,\"value_text\":null},\"evidence\":{\"chunk_id\":\"NEWS-3843a7d236eacb14-C00001\",\"document_id\":\"NEWS-3843a7d236eacb14\",\"quote\":\"아모레퍼시픽은 에스트라가 한국광고학회 ‘2026 올해의 브랜드상’ 수상 브랜드로 선정됐다고 30일 밝혔다. 시상식은 이날 부산 파라다이스호텔에서 열린다.\",\"source_metadata\":{\"char_end\":796,\"char_start\":0,\"company_ids\":[\"COMPANY-AMOREPACIFIC\"],\"published_at\":\"2026-10-30T09:50:00+09:00\",\"source_row\":335,\"source_url\":\"https://www.pinpointnews.co.kr/news/articleView.html?idxno=499940\",\"title\":\"아모레퍼시픽 에스트라, '올해의 브랜드상' 선정\"}},\"object_id\":\"AUTO-9c150b9c080a626bcbaa5af7\",\"object_resolution\":\"기존_자동연결_미검토\",\"original_object_id\":\"AUTO-9c150b9c080a626bcbaa5af7\",\"original_object_resolution\":\"기존_자동연결_미검토\",\"original_subject_id\":\"MENTION-c077d530feffa7fca55a59b3\",\"original_subject_resolution\":\"미결_원문검토필요\",\"predicate\":\"EVENT_IN_PLACE\",\"relation_id\":\"NEWS-3843a7d236eacb14-C00001:R0006\",\"review_status\":\"규칙기반연결_관계의미검토필요\",\"scope\":\"기존_한쪽미결_Event\",\"source_kind\":\"news\",\"subject_id\":\"EVENT-RULE-c54dfcd323152a767b51\",\"subject_resolution\":\"행사_동일표기_연도구분_잠정\"},{\"attributes\":{\"as_of_date\":null,\"event_date\":null,\"status\":\"unknown\",\"unit\":null,\"valid_from\":null,\"valid_to\":null,\"value_number\":null,\"value_text\":null},\"evidence\":{\"chunk_id\":\"NEWS-3b21321e80d0a5d0-C00001\",\"document_id\":\"NEWS-3b21321e80d0a5d0\",\"quote\":\"아모레퍼시픽의 정통 더마 브랜드 에스트라(AESTURA)가 한국광고학회가 선정한 '2026 올해의 브랜드상' 수상자로 선정됐다고 30일 밝혔다. 시상식은 이날 부산 파라다이스호텔에서 열린다.\",\"source_metadata\":{\"char_end\":2483,\"char_start\":0,\"company_ids\":[\"COMPANY-AMOREPACIFIC\"],\"published_at\":\"2026-10-30T10:30:00+09:00\",\"source_row\":325,\"source_url\":\"https://www.businessplus.kr/news/articleView.html?idxno=119006\",\"title\":\"[잘먹잘살+]에스트라·쿠팡로지스틱스서비스·카카오모빌리티·슈콤마보...\"}},\"object_id\":\"AUTO-9c150b9c080a626bcbaa5af7\",\"object_resolution\":\"기존_자동연결_미검토\",\"original_object_id\":\"AUTO-9c150b9c080a626bcbaa5af7\",\"original_object_resolution\":\"기존_자동연결_미검토\",\"original_subject_id\":\"MENTION-6e028263bf8b754394e9f573\",\"original_subject_resolution\":\"미결_원문검토필요\",\"predicate\":\"EVENT_IN_PLACE\",\"relation_id\":\"NEWS-3b21321e80d0a5d0-C00001:R0002\",\"review_status\":\"규칙기반연결_관계의미검토필요\",\"scope\":\"기존_한쪽미결_Event\",\"source_kind\":\"news\",\"subject_id\":\"EVENT-RULE-c54dfcd323152a767b51\",\"subject_resolution\":\"행사_동일표기_연도구분_잠정\"},{\"attributes\":{\"as_of_date\":null,\"event_date\":null,\"status\":\"unknown\",\"unit\":null,\"valid_from\":null,\"valid_to\":null,\"value_number\":null,\"value_text\":null},\"evidence\":{\"chunk_id\":\"NEWS-3c5234422dfa5279-C00001\",\"document_id\":\"NEWS-3c5234422dfa5279\",\"quote\":\"시상식은 30일 부산 파라다이스호텔에서 열린다.\",\"source_metadata\":{\"char_end\":875,\"char_start\":0,\"company_ids\":[\"COMPANY-AMOREPACIFIC\"],\"published_at\":\"2026-10-30T11:14:00+09:00\",\"source_row\":311,\"source_url\":\"https://www.lcnews.co.kr/news/articleView.html?idxno=210593\",\"title\":\"에스트라, 피부과학 기반 브랜드 활동으로 올해의 브랜드상\"}},\"object_id\":\"AUTO-9c150b9c080a626bcbaa5af7\",\"object_resolution\":\"기존_자동연결_미검토\",\"original_object_id\":\"AUTO-9c150b9c080a626bcbaa5af7\",\"original_object_resolution\":\"기존_자동연결_미검토\",\"original_subject_id\":\"MENTION-f9267ed7bda7d7c562aaf8f8\",\"original_subject_resolution\":\"미결_원문검토필요\",\"predicate\":\"EVENT_IN_PLACE\",\"relation_id\":\"NEWS-3c5234422dfa5279-C00001:R0004\",\"review_status\":\"규칙기반연결_관계의미검토필요\",\"scope\":\"기존_한쪽미결_Event\",\"source_kind\":\"news\",\"subject_id\":\"EVENT-RULE-c54dfcd323152a767b51\",\"subject_resolution\":\"행사_동일표기_연도구분_잠정\"},{\"attributes\":{\"as_of_date\":null,\"event_date\":null,\"status\":\"unknown\",\"unit\":null,\"valid_from\":null,\"valid_to\":null,\"value_number\":null,\"value_text\":null},\"evidence\":{\"chunk_id\":\"NEWS-5e799eb705740d49-C00001\",\"document_id\":\"NEWS-5e799eb705740d49\",\"quote\":\"아모레퍼시픽의 더마 브랜드 에스트라는 한국광고학회가 선정한 '2026 올해의 브랜드상' 수상자로 이름을 올렸다. 시상식은 이날 부산 파라다이스호텔에서 열리며, 총 6개 브랜드가 수상한다.\",\"source_metadata\":{\"char_end\":2169,\"char_start\":0,\"company_ids\":[\"COMPANY-AMOREPACIFIC\"],\"published_at\":\"2026-10-30T15:16:00+09:00\",\"source_row\":288,\"source_url\":\"https://www.moneystorm.kr/news/articleView.html?idxno=7876\",\"title\":\"[패션·뷰티 돋보기] 한샘, 만학도에 가구 110여 점 지원…에스트라 1,0...\"}},\"object_id\":\"AUTO-9c150b9c080a626bcbaa5af7\",\"object_resolution\":\"기존_자동연결_미검토\",\"original_object_id\":\"AUTO-9c150b9c080a626bcbaa5af7\",\"original_object_resolution\":\"기존_자동연결_미검토\",\"original_subject_id\":\"MENTION-ab6be59c00c98753c4394a2e\",\"original_subject_resolution\":\"미결_원문검토필요\",\"predicate\":\"EVENT_IN_PLACE\",\"relation_id\":\"NEWS-5e799eb705740d49-C00001:R0005\",\"review_status\":\"규칙기반연결_관계의미검토필요\",\"scope\":\"기존_한쪽미결_Event\",\"source_kind\":\"news\",\"subject_id\":\"EVENT-RULE-c54dfcd323152a767b51\",\"subject_resolution\":\"행사_동일표기_연도구분_잠정\"},{\"attributes\":{\"as_of_date\":null,\"event_date\":null,\"status\":\"unknown\",\"unit\":null,\"valid_from\":null,\"valid_to\":null,\"value_number\":null,\"value_text\":null},\"evidence\":{\"chunk_id\":\"NEWS-b1153bd4291d51f7-C00001\",\"document_id\":\"NEWS-b1153bd4291d51f7\",\"quote\":\"한국광고학회는 에스트라를 ‘2026 올해의 브랜드상' 수상 브랜드로 정했으며, 시상식은 30일 부산 파라다이스호텔에서 진행된다.\",\"source_metadata\":{\"char_end\":787,\"char_start\":0,\"company_ids\":[\"COMPANY-AMOREPACIFIC\"],\"published_at\":\"2026-10-30T21:50:00+09:00\",\"source_row\":259,\"source_url\":\"https://www.tournews21.com/news/articleView.html?idxno=147128\",\"title\":\"아모레퍼시픽 에스트라, 한국광고학회 '올해의 브랜드상' 받아… 피부과...\"}},\"object_id\":\"AUTO-9c150b9c080a626bcbaa5af7\",\"object_resolution\":\"기존_자동연결_미검토\",\"original_object_id\":\"AUTO-9c150b9c080a626bcbaa5af7\",\"original_object_resolution\":\"기존_자동연결_미검토\",\"original_subject_id\":\"MENTION-41227f454325b58ff684d5e1\",\"original_subject_resolution\":\"미결_원문검토필요\",\"predicate\":\"EVENT_IN_PLACE\",\"relation_id\":\"NEWS-b1153bd4291d51f7-C00001:R0002\",\"review_status\":\"규칙기반연결_관계의미검토필요\",\"scope\":\"기존_한쪽미결_Event\",\"source_kind\":\"news\",\"subject_id\":\"EVENT-RULE-c54dfcd323152a767b51\",\"subject_resolution\":\"행사_동일표기_연도구분_잠정\"},{\"attributes\":{\"as_of_date\":null,\"event_date\":null,\"status\":\"unknown\",\"unit\":null,\"valid_from\":null,\"valid_to\":null,\"value_number\":null,\"value_text\":null},\"evidence\":{\"chunk_id\":\"NEWS-b7f8133d03f2528c-C00001\",\"document_id\":\"NEWS-b7f8133d03f2528c\",\"quote\":\"시상식은 30일 부산 파라다이스호텔에서 열린다.\",\"source_metadata\":{\"char_end\":820,\"char_start\":0,\"company_ids\":[\"COMPANY-AMOREPACIFIC\"],\"published_at\":\"2026-10-30T12:52:00+09:00\",\"source_row\":305,\"source_url\":\"https://www.koreareport.co.kr/news/articleView.html?idxno=54132\",\"title\":\"아모레퍼시픽 에스트라, 한국광고학회 '올해의 브랜드상' 수상\"}},\"object_id\":\"AUTO-9c150b9c080a626bcbaa5af7\",\"object_resolution\":\"기존_자동연결_미검토\",\"original_object_id\":\"AUTO-9c150b9c080a626bcbaa5af7\",\"original_object_resolution\":\"기존_자동연결_미검토\",\"original_subject_id\":\"MENTION-20adcd632ea9032892a281df\",\"original_subject_resolution\":\"미결_원문검토필요\",\"predicate\":\"EVENT_IN_PLACE\",\"relation_id\":\"NEWS-b7f8133d03f2528c-C00001:R0002\",\"review_status\":\"규칙기반연결_관계의미검토필요\",\"scope\":\"기존_한쪽미결_Event\",\"source_kind\":\"news\",\"subject_id\":\"EVENT-RULE-c54dfcd323152a767b51\",\"subject_resolution\":\"행사_동일표기_연도구분_잠정\"}]",
+        "source_urls": [
+          "https://www.businessplus.kr/news/articleView.html?idxno=119006",
+          "https://www.koreareport.co.kr/news/articleView.html?idxno=54132",
+          "https://www.lcnews.co.kr/news/articleView.html?idxno=210593",
+          "https://www.moneystorm.kr/news/articleView.html?idxno=7876",
+          "https://www.pinpointnews.co.kr/news/articleView.html?idxno=499940",
+          "https://www.tournews21.com/news/articleView.html?idxno=147128",
+          "https://www.womentimes.co.kr/news/articleView.html?idxno=107458"
+        ],
+        "status": "unknown"
+      }
+    },
+    {
+      "uid": "brian_m6_20261108_v1|REL-93ed691f01616803e686df1fd86bb264cb435dd82200d2a61ba4bb573ecc6032",
+      "input_hash": "305f574aca152a61b1ad89ef36a69c0c9eb2bb6d4fb37b716f1a13bd91b1838b",
+      "sources_json": "[{\"attributes\":{\"as_of_date\":null,\"event_date\":null,\"status\":\"planned\",\"unit\":null,\"valid_from\":null,\"valid_to\":null,\"value_number\":null,\"value_text\":null},\"evidence\":{\"chunk_id\":\"NEWS-9935a01d1eed55f8-C00001\",\"document_id\":\"NEWS-9935a01d1eed55f8\",\"quote\":\"시상식은 오는 14일 헤리티크 제주에서 열린다.\",\"source_metadata\":{\"char_end\":957,\"char_start\":0,\"company_ids\":[\"COMPANY-INNISFREE\"],\"published_at\":\"2025-11-06T08:08:00.000Z\",\"source_row\":2167,\"source_url\":\"http://www.jejumaeil.net/news/articleView.html?idxno=352069\",\"title\":\"제주의 지속가능 미래 밝힌다, '2025 제주 그린어워드'\"}},\"object_id\":\"AUTO-a5d927155b025d564ccdb623\",\"object_resolution\":\"기존_자동연결_미검토\",\"original_object_id\":\"AUTO-a5d927155b025d564ccdb623\",\"original_object_resolution\":\"기존_자동연결_미검토\",\"original_subject_id\":\"MENTION-49af8a9fd1f0ec7238ffef64\",\"original_subject_resolution\":\"미결_원문검토필요\",\"predicate\":\"EVENT_IN_PLACE\",\"relation_id\":\"NEWS-9935a01d1eed55f8-C00001:R0003\",\"review_status\":\"규칙기반연결_관계의미검토필요\",\"scope\":\"기존_한쪽미결_Event\",\"source_kind\":\"news\",\"subject_id\":\"EVENT-RULE-c54dfcd323152a767b51\",\"subject_resolution\":\"행사_동일표기_연도구분_잠정\"}]",
+      "source_count": 1,
+      "start_uid": "brian_m6_20261108_v1|EVENT-RULE-c54dfcd323152a767b51",
+      "end_uid": "brian_m6_20261108_v1|AUTO-a5d927155b025d564ccdb623",
+      "relation_type": "B_EVENT_IN_PLACE",
+      "properties": {
+        "evidence_count": 1,
+        "document_ids": [
+          "NEWS-9935a01d1eed55f8"
+        ],
+        "input_hash": "305f574aca152a61b1ad89ef36a69c0c9eb2bb6d4fb37b716f1a13bd91b1838b",
+        "disclosure_notes_json": "{}",
+        "source_count": 1,
+        "attributes_json": "{\"as_of_date\":null,\"event_date\":null,\"status\":\"planned\",\"unit\":null,\"valid_from\":null,\"valid_to\":null,\"value_number\":null,\"value_text\":null}",
+        "dataset_id": "brian_m6_20261108_v1",
+        "source_relation_ids": [
+          "NEWS-9935a01d1eed55f8-C00001:R0003"
+        ],
+        "relation_id": "REL-93ed691f01616803e686df1fd86bb264cb435dd82200d2a61ba4bb573ecc6032",
+        "uid": "brian_m6_20261108_v1|REL-93ed691f01616803e686df1fd86bb264cb435dd82200d2a61ba4bb573ecc6032",
+        "predicate": "EVENT_IN_PLACE",
+        "evidence_quotes": [
+          "시상식은 오는 14일 헤리티크 제주에서 열린다."
+        ],
+        "sources_json": "[{\"attributes\":{\"as_of_date\":null,\"event_date\":null,\"status\":\"planned\",\"unit\":null,\"valid_from\":null,\"valid_to\":null,\"value_number\":null,\"value_text\":null},\"evidence\":{\"chunk_id\":\"NEWS-9935a01d1eed55f8-C00001\",\"document_id\":\"NEWS-9935a01d1eed55f8\",\"quote\":\"시상식은 오는 14일 헤리티크 제주에서 열린다.\",\"source_metadata\":{\"char_end\":957,\"char_start\":0,\"company_ids\":[\"COMPANY-INNISFREE\"],\"published_at\":\"2025-11-06T08:08:00.000Z\",\"source_row\":2167,\"source_url\":\"http://www.jejumaeil.net/news/articleView.html?idxno=352069\",\"title\":\"제주의 지속가능 미래 밝힌다, '2025 제주 그린어워드'\"}},\"object_id\":\"AUTO-a5d927155b025d564ccdb623\",\"object_resolution\":\"기존_자동연결_미검토\",\"original_object_id\":\"AUTO-a5d927155b025d564ccdb623\",\"original_object_resolution\":\"기존_자동연결_미검토\",\"original_subject_id\":\"MENTION-49af8a9fd1f0ec7238ffef64\",\"original_subject_resolution\":\"미결_원문검토필요\",\"predicate\":\"EVENT_IN_PLACE\",\"relation_id\":\"NEWS-9935a01d1eed55f8-C00001:R0003\",\"review_status\":\"규칙기반연결_관계의미검토필요\",\"scope\":\"기존_한쪽미결_Event\",\"source_kind\":\"news\",\"subject_id\":\"EVENT-RULE-c54dfcd323152a767b51\",\"subject_resolution\":\"행사_동일표기_연도구분_잠정\"}]",
+        "source_urls": [
+          "http://www.jejumaeil.net/news/articleView.html?idxno=352069"
+        ],
+        "status": "planned"
+      }
+    },
+    {
+      "uid": "brian_m6_20261108_v1|REL-210db0f3f379d2c6c6eae002e4f3039266b0593dea38f7cb14db543f829b23cf",
+      "input_hash": "305f574aca152a61b1ad89ef36a69c0c9eb2bb6d4fb37b716f1a13bd91b1838b",
+      "sources_json": "[{\"attributes\":{\"as_of_date\":null,\"event_date\":null,\"status\":\"unknown\",\"unit\":null,\"valid_from\":null,\"valid_to\":null,\"value_number\":null,\"value_text\":null},\"evidence\":{\"chunk_id\":\"NEWS-10ab280be958bd7d-C00001\",\"document_id\":\"NEWS-10ab280be958bd7d\",\"quote\":\"이니스프리 모음재단은 이날 오후 라마다프라자제주호텔에서 시상식을 열어 성 원장과 정 본부장에게 각각 상패와 상금 500만원을 전달했다.\",\"source_metadata\":{\"char_end\":408,\"char_start\":0,\"company_ids\":[\"COMPANY-INNISFREE\"],\"published_at\":\"2024-11-22T06:30:00.000Z\",\"source_row\":1979,\"source_url\":\"https://www.yna.co.kr/view/AKR20241122109500056?input=1195m\",\"title\":\"'2024 제주 그린어워드' 수상자로 성범영·정용환 선정\"}},\"object_id\":\"EVENT-RULE-c54dfcd323152a767b51\",\"object_resolution\":\"행사_동일표기_연도구분_잠정\",\"original_object_id\":\"MENTION-9b3a3e58ed8a4aa3be6fda9b\",\"original_object_resolution\":\"미결_원문검토필요\",\"original_subject_id\":\"AUTO-01bc1ba56fc455cef2817011\",\"original_subject_resolution\":\"기존_자동연결_미검토\",\"predicate\":\"PARTICIPATES_IN\",\"relation_id\":\"NEWS-10ab280be958bd7d-C00001:R0002\",\"review_status\":\"규칙기반연결_관계의미검토필요\",\"scope\":\"기존_한쪽미결_Event\",\"source_kind\":\"news\",\"subject_id\":\"AUTO-01bc1ba56fc455cef2817011\",\"subject_resolution\":\"기존_자동연결_미검토\"}]",
+      "source_count": 1,
+      "start_uid": "brian_m6_20261108_v1|AUTO-01bc1ba56fc455cef2817011",
+      "end_uid": "brian_m6_20261108_v1|EVENT-RULE-c54dfcd323152a767b51",
+      "relation_type": "B_PARTICIPATES_IN",
+      "properties": {
+        "evidence_count": 1,
+        "document_ids": [
+          "NEWS-10ab280be958bd7d"
+        ],
+        "input_hash": "305f574aca152a61b1ad89ef36a69c0c9eb2bb6d4fb37b716f1a13bd91b1838b",
+        "disclosure_notes_json": "{}",
+        "source_count": 1,
+        "attributes_json": "{\"as_of_date\":null,\"event_date\":null,\"status\":\"unknown\",\"unit\":null,\"valid_from\":null,\"valid_to\":null,\"value_number\":null,\"value_text\":null}",
+        "dataset_id": "brian_m6_20261108_v1",
+        "source_relation_ids": [
+          "NEWS-10ab280be958bd7d-C00001:R0002"
+        ],
+        "relation_id": "REL-210db0f3f379d2c6c6eae002e4f3039266b0593dea38f7cb14db543f829b23cf",
+        "uid": "brian_m6_20261108_v1|REL-210db0f3f379d2c6c6eae002e4f3039266b0593dea38f7cb14db543f829b23cf",
+        "predicate": "PARTICIPATES_IN",
+        "evidence_quotes": [
+          "이니스프리 모음재단은 이날 오후 라마다프라자제주호텔에서 시상식을 열어 성 원장과 정 본부장에게 각각 상패와 상금 500만원을 전달했다."
+        ],
+        "sources_json": "[{\"attributes\":{\"as_of_date\":null,\"event_date\":null,\"status\":\"unknown\",\"unit\":null,\"valid_from\":null,\"valid_to\":null,\"value_number\":null,\"value_text\":null},\"evidence\":{\"chunk_id\":\"NEWS-10ab280be958bd7d-C00001\",\"document_id\":\"NEWS-10ab280be958bd7d\",\"quote\":\"이니스프리 모음재단은 이날 오후 라마다프라자제주호텔에서 시상식을 열어 성 원장과 정 본부장에게 각각 상패와 상금 500만원을 전달했다.\",\"source_metadata\":{\"char_end\":408,\"char_start\":0,\"company_ids\":[\"COMPANY-INNISFREE\"],\"published_at\":\"2024-11-22T06:30:00.000Z\",\"source_row\":1979,\"source_url\":\"https://www.yna.co.kr/view/AKR20241122109500056?input=1195m\",\"title\":\"'2024 제주 그린어워드' 수상자로 성범영·정용환 선정\"}},\"object_id\":\"EVENT-RULE-c54dfcd323152a767b51\",\"object_resolution\":\"행사_동일표기_연도구분_잠정\",\"original_object_id\":\"MENTION-9b3a3e58ed8a4aa3be6fda9b\",\"original_object_resolution\":\"미결_원문검토필요\",\"original_subject_id\":\"AUTO-01bc1ba56fc455cef2817011\",\"original_subject_resolution\":\"기존_자동연결_미검토\",\"predicate\":\"PARTICIPATES_IN\",\"relation_id\":\"NEWS-10ab280be958bd7d-C00001:R0002\",\"review_status\":\"규칙기반연결_관계의미검토필요\",\"scope\":\"기존_한쪽미결_Event\",\"source_kind\":\"news\",\"subject_id\":\"AUTO-01bc1ba56fc455cef2817011\",\"subject_resolution\":\"기존_자동연결_미검토\"}]",
+        "source_urls": [
+          "https://www.yna.co.kr/view/AKR20241122109500056?input=1195m"
+        ],
+        "status": "unknown"
+      }
+    }
+  ]
+}

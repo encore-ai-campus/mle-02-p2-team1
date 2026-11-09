@@ -1,0 +1,269 @@
+[
+  {
+    "relation_id": "OWN-2025-12-31-COMPANY-AMOREPACIFIC",
+    "doc": "https://kind.krx.co.kr/external/2026/03/18/001082/20260318005107/11011.htm",
+    "document_id": "APH-2025-ANNUAL",
+    "chunk_id": "APH-2025-ANNUAL-COMPANY-AMOREPACIFIC",
+    "xpath": "/html/body/table[132]/tbody/tr/td/table[2]/tbody/tr[1]",
+    "raw_cells": [
+      "㈜아모레퍼시픽홀딩스",
+      "㈜아모레퍼시픽(*1)",
+      "화장품 제조 및 판매",
+      "38.1",
+      "12월 31일",
+      "대한민국"
+    ],
+    "m4": {
+      "relation_id": "OWN-2025-12-31-COMPANY-AMOREPACIFIC",
+      "subject_id": "COMPANY-AMOREPACIFIC-HOLDINGS",
+      "subject_name": "주식회사 아모레퍼시픽홀딩스",
+      "predicate": "OWNS_STAKE",
+      "object_id": "COMPANY-AMOREPACIFIC",
+      "object_name": "주식회사 아모레퍼시픽",
+      "value_number": 38.1,
+      "unit": "%",
+      "as_of_date": "2025-12-31",
+      "percentage_basis": "연결 종속기업 표의 지분율 38.1%; 의결권 50% 미만에도 사실상 지배 주석. 별도 보통주 주주현황 38.0%와 표·분모 구분",
+      "source_document_id": "APH-2025-ANNUAL",
+      "chunk_id": "APH-2025-ANNUAL-COMPANY-AMOREPACIFIC",
+      "evidence_quote": "㈜아모레퍼시픽홀딩스 | ㈜아모레퍼시픽(*1) | 화장품 제조 및 판매 | 38.1 | 12월 31일 | 대한민국",
+      "review_status": "공시표_대조완료_적재전_스키마검토필요",
+      "scope": "표의 투자회사별 지분율; 간접 지분 추정 아님"
+    },
+    "m5_core_fields_match_m4": true,
+    "m5": {
+      "relation_id": "OWN-2025-12-31-COMPANY-AMOREPACIFIC",
+      "subject_id": "COMPANY-AMOREPACIFIC-HOLDINGS",
+      "predicate": "OWNS_STAKE",
+      "object_id": "COMPANY-AMOREPACIFIC",
+      "attributes": {
+        "value_number": 38.1,
+        "unit": "%",
+        "as_of_date": "2025-12-31",
+        "percentage_basis": "연결 종속기업 표의 지분율 38.1%; 의결권 50% 미만에도 사실상 지배 주석. 별도 보통주 주주현황 38.0%와 표·분모 구분",
+        "scope": "표의 투자회사별 지분율; 간접 지분 추정 아님"
+      },
+      "evidence": {
+        "document": {
+          "id": "APH-2025-ANNUAL",
+          "file": "holdings_2025_annual.html",
+          "as_of": "2025-12-31",
+          "filed": "2026-03-18",
+          "url": "https://kind.krx.co.kr/external/2026/03/18/001082/20260318005107/11011.htm",
+          "sha256": "4e9ab42aef43d1634195c5b76bb274d1d9cbd8c8994f96187d29b548c4e3fe5f",
+          "table_xpath": "/html/body/table[132]/tbody/tr/td/table[2]",
+          "target_rows": 7
+        },
+        "chunk": {
+          "document_id": "APH-2025-ANNUAL",
+          "chunk_id": "APH-2025-ANNUAL-COMPANY-AMOREPACIFIC",
+          "as_of_date": "2025-12-31",
+          "section": "연결재무제표 주석 1.2 종속기업의 현황",
+          "header": [
+            "투자회사",
+            "피투자회사",
+            "업 종",
+            "지분율(%)",
+            "결산일",
+            "소재국"
+          ],
+          "text": "㈜아모레퍼시픽홀딩스 | ㈜아모레퍼시픽(*1) | 화장품 제조 및 판매 | 38.1 | 12월 31일 | 대한민국",
+          "source_xpath": "/html/body/table[132]/tbody/tr/td/table[2]/tbody/tr[1]",
+          "source_url": "https://kind.krx.co.kr/external/2026/03/18/001082/20260318005107/11011.htm"
+        },
+        "quote": "㈜아모레퍼시픽홀딩스 | ㈜아모레퍼시픽(*1) | 화장품 제조 및 판매 | 38.1 | 12월 31일 | 대한민국",
+        "related_note_chunk_ids": [
+          "APH-2025-ANNUAL-NOTE-control"
+        ]
+      },
+      "source_kind": "disclosure",
+      "review_status": "공시표_대조완료_적재전_스키마검토필요"
+    },
+    "graph_actual_from_m7": null,
+    "graph_actual_2025_from_csv": "4.2.csv: 2025-12-31 38.1%; REL-fde9926e7921ad9d473147479be36864e1de3574760a31a62aa16d578a796ecc"
+  },
+  {
+    "relation_id": "OWN-2026-03-31-COMPANY-AMOREPACIFIC",
+    "doc": "https://kind.krx.co.kr/external/2026/05/15/001430/20260515003119/11013.htm",
+    "document_id": "APH-2026-Q1",
+    "chunk_id": "APH-2026-Q1-COMPANY-AMOREPACIFIC",
+    "xpath": "/html/body/table[133]/tbody/tr/td/table[2]/tbody/tr[1]",
+    "raw_cells": [
+      "㈜아모레퍼시픽홀딩스",
+      "㈜아모레퍼시픽(*1)",
+      "화장품 제조 및 판매",
+      "38.1",
+      "12월 31일",
+      "대한민국"
+    ],
+    "m4": {
+      "relation_id": "OWN-2026-03-31-COMPANY-AMOREPACIFIC",
+      "subject_id": "COMPANY-AMOREPACIFIC-HOLDINGS",
+      "subject_name": "주식회사 아모레퍼시픽홀딩스",
+      "predicate": "OWNS_STAKE",
+      "object_id": "COMPANY-AMOREPACIFIC",
+      "object_name": "주식회사 아모레퍼시픽",
+      "value_number": 38.1,
+      "unit": "%",
+      "as_of_date": "2026-03-31",
+      "percentage_basis": "연결 종속기업 표의 지분율 38.1%; 의결권 50% 미만에도 사실상 지배 주석. 별도 보통주 주주현황 38.0%와 표·분모 구분",
+      "source_document_id": "APH-2026-Q1",
+      "chunk_id": "APH-2026-Q1-COMPANY-AMOREPACIFIC",
+      "evidence_quote": "㈜아모레퍼시픽홀딩스 | ㈜아모레퍼시픽(*1) | 화장품 제조 및 판매 | 38.1 | 12월 31일 | 대한민국",
+      "review_status": "공시표_대조완료_적재전_스키마검토필요",
+      "scope": "표의 투자회사별 지분율; 간접 지분 추정 아님"
+    },
+    "m5_core_fields_match_m4": true,
+    "m5": {
+      "relation_id": "OWN-2026-03-31-COMPANY-AMOREPACIFIC",
+      "subject_id": "COMPANY-AMOREPACIFIC-HOLDINGS",
+      "predicate": "OWNS_STAKE",
+      "object_id": "COMPANY-AMOREPACIFIC",
+      "attributes": {
+        "value_number": 38.1,
+        "unit": "%",
+        "as_of_date": "2026-03-31",
+        "percentage_basis": "연결 종속기업 표의 지분율 38.1%; 의결권 50% 미만에도 사실상 지배 주석. 별도 보통주 주주현황 38.0%와 표·분모 구분",
+        "scope": "표의 투자회사별 지분율; 간접 지분 추정 아님"
+      },
+      "evidence": {
+        "document": {
+          "id": "APH-2026-Q1",
+          "file": "holdings_2026_q1.html",
+          "as_of": "2026-03-31",
+          "filed": "2026-05-15",
+          "url": "https://kind.krx.co.kr/external/2026/05/15/001430/20260515003119/11013.htm",
+          "sha256": "89e0f4ccf54d8bea1fb4b3a4d2145b493edac5c8c3945d5abf040fec9d80be42",
+          "table_xpath": "/html/body/table[133]/tbody/tr/td/table[2]",
+          "target_rows": 7
+        },
+        "chunk": {
+          "document_id": "APH-2026-Q1",
+          "chunk_id": "APH-2026-Q1-COMPANY-AMOREPACIFIC",
+          "as_of_date": "2026-03-31",
+          "section": "연결재무제표 주석 1.2 종속기업의 현황",
+          "header": [
+            "투자회사",
+            "피투자회사",
+            "업 종",
+            "지분율(%)",
+            "결산일",
+            "소재국"
+          ],
+          "text": "㈜아모레퍼시픽홀딩스 | ㈜아모레퍼시픽(*1) | 화장품 제조 및 판매 | 38.1 | 12월 31일 | 대한민국",
+          "source_xpath": "/html/body/table[133]/tbody/tr/td/table[2]/tbody/tr[1]",
+          "source_url": "https://kind.krx.co.kr/external/2026/05/15/001430/20260515003119/11013.htm"
+        },
+        "quote": "㈜아모레퍼시픽홀딩스 | ㈜아모레퍼시픽(*1) | 화장품 제조 및 판매 | 38.1 | 12월 31일 | 대한민국",
+        "related_note_chunk_ids": [
+          "APH-2026-Q1-NOTE-control"
+        ]
+      },
+      "source_kind": "disclosure",
+      "review_status": "공시표_대조완료_적재전_스키마검토필요"
+    },
+    "graph_actual_from_m7": {
+      "type": "B_OWNS_STAKE",
+      "start_id": "COMPANY-AMOREPACIFIC-HOLDINGS",
+      "end_id": "COMPANY-AMOREPACIFIC",
+      "value_number": 38.1,
+      "unit": "%",
+      "as_of_date": "2026-03-31",
+      "source_relation_ids": [
+        "OWN-2026-03-31-COMPANY-AMOREPACIFIC"
+      ]
+    },
+    "graph_actual_2025_from_csv": null
+  },
+  {
+    "relation_id": "OWN-2026-03-31-COMPANY-COSRX",
+    "doc": "https://kind.krx.co.kr/external/2026/05/15/001430/20260515003119/11013.htm",
+    "document_id": "APH-2026-Q1",
+    "chunk_id": "APH-2026-Q1-COMPANY-COSRX",
+    "xpath": "/html/body/table[133]/tbody/tr/td/table[2]/tbody/tr[9]",
+    "raw_cells": [
+      "㈜아모레퍼시픽",
+      "㈜코스알엑스",
+      "화장품 제조 및 판매",
+      "90.3",
+      "12월 31일",
+      "대한민국"
+    ],
+    "m4": {
+      "relation_id": "OWN-2026-03-31-COMPANY-COSRX",
+      "subject_id": "COMPANY-AMOREPACIFIC",
+      "subject_name": "주식회사 아모레퍼시픽",
+      "predicate": "OWNS_STAKE",
+      "object_id": "COMPANY-COSRX",
+      "object_name": "주식회사 코스알엑스",
+      "value_number": 90.3,
+      "unit": "%",
+      "as_of_date": "2026-03-31",
+      "percentage_basis": "보고서 기재 지분율; 주식 종류 및 분모 별도 확인",
+      "source_document_id": "APH-2026-Q1",
+      "chunk_id": "APH-2026-Q1-COMPANY-COSRX",
+      "evidence_quote": "㈜아모레퍼시픽 | ㈜코스알엑스 | 화장품 제조 및 판매 | 90.3 | 12월 31일 | 대한민국",
+      "review_status": "공시표_대조완료_적재전_스키마검토필요",
+      "scope": "표의 투자회사별 지분율; 간접 지분 추정 아님"
+    },
+    "m5_core_fields_match_m4": true,
+    "m5": {
+      "relation_id": "OWN-2026-03-31-COMPANY-COSRX",
+      "subject_id": "COMPANY-AMOREPACIFIC",
+      "predicate": "OWNS_STAKE",
+      "object_id": "COMPANY-COSRX",
+      "attributes": {
+        "value_number": 90.3,
+        "unit": "%",
+        "as_of_date": "2026-03-31",
+        "percentage_basis": "보고서 기재 지분율; 주식 종류 및 분모 별도 확인",
+        "scope": "표의 투자회사별 지분율; 간접 지분 추정 아님"
+      },
+      "evidence": {
+        "document": {
+          "id": "APH-2026-Q1",
+          "file": "holdings_2026_q1.html",
+          "as_of": "2026-03-31",
+          "filed": "2026-05-15",
+          "url": "https://kind.krx.co.kr/external/2026/05/15/001430/20260515003119/11013.htm",
+          "sha256": "89e0f4ccf54d8bea1fb4b3a4d2145b493edac5c8c3945d5abf040fec9d80be42",
+          "table_xpath": "/html/body/table[133]/tbody/tr/td/table[2]",
+          "target_rows": 7
+        },
+        "chunk": {
+          "document_id": "APH-2026-Q1",
+          "chunk_id": "APH-2026-Q1-COMPANY-COSRX",
+          "as_of_date": "2026-03-31",
+          "section": "연결재무제표 주석 1.2 종속기업의 현황",
+          "header": [
+            "투자회사",
+            "피투자회사",
+            "업 종",
+            "지분율(%)",
+            "결산일",
+            "소재국"
+          ],
+          "text": "㈜아모레퍼시픽 | ㈜코스알엑스 | 화장품 제조 및 판매 | 90.3 | 12월 31일 | 대한민국",
+          "source_xpath": "/html/body/table[133]/tbody/tr/td/table[2]/tbody/tr[9]",
+          "source_url": "https://kind.krx.co.kr/external/2026/05/15/001430/20260515003119/11013.htm"
+        },
+        "quote": "㈜아모레퍼시픽 | ㈜코스알엑스 | 화장품 제조 및 판매 | 90.3 | 12월 31일 | 대한민국",
+        "related_note_chunk_ids": []
+      },
+      "source_kind": "disclosure",
+      "review_status": "공시표_대조완료_적재전_스키마검토필요"
+    },
+    "graph_actual_from_m7": {
+      "type": "B_OWNS_STAKE",
+      "start_id": "COMPANY-AMOREPACIFIC",
+      "end_id": "COMPANY-COSRX",
+      "value_number": 90.3,
+      "unit": "%",
+      "as_of_date": "2026-03-31",
+      "source_relation_ids": [
+        "OWN-2026-03-31-COMPANY-COSRX"
+      ]
+    },
+    "graph_actual_2025_from_csv": null
+  }
+]
