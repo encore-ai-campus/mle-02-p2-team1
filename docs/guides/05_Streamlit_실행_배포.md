@@ -81,6 +81,13 @@ Neo4j 노드·관계·스키마·검토 상태는 변경하지 않습니다. 원
 Streamlit Community Cloud 배포 주소:
 https://mle-02-p2-team1-g8nyr7ga84jec3p54rbrzf.streamlit.app/
 
+앱 직접 접속 주소:
+https://mle-02-p2-team1-g8nyr7ga84jec3p54rbrzf.streamlit.app/~/+/
+
+기본 주소의 Cloud 안내 화면에서 로딩이 계속되면 직접 접속 주소를 사용합니다.
+2026-11-09 배포 확인에서는 기본 안내 화면의 사용자 정보 요청이 404를 반환했지만,
+앱 직접 접속과 상태 확인 요청은 정상 동작했습니다.
+
 | 배포 설정 | 값 |
 |---|---|
 | 저장소 | `encore-ai-campus/mle-02-p2-team1` |
@@ -100,3 +107,12 @@ Secrets에는 기존 환경의 `OPENAI_API_KEY`, `NEO4J_URI`, `NEO4J_USERNAME`,
 클라우드의 `private_data/query_runs/` 기록은 영구 보관용이 아니므로 필요한 답변은
 화면의 **답변 저장**으로 내려받습니다. 기존 `Dockerfile.streamlit`은 다른 Python
 호스팅 환경에 배포할 때 사용할 수 있습니다.
+
+### 배포 확인 (2026-11-09)
+
+- 로컬 화면 자동 테스트: 14건 통과. 실제 API·DB 호출을 대신하는 검사가 아닙니다.
+- 클라우드 실제 질문: 2025년 매출 및 주요 요인 질문 1건에 답변 완료.
+- 정형 매출, AI 통합분석, 출처 2건과 실제 그래프 경로 표시를 확인했습니다.
+- 실행 단계: `identify → financial_background → enrich → finalize`.
+- 실행 ID: `468d5d2d-feb1-454e-850c-d002288e2ae0`, 화면 처리 시간 51.4초.
+- DB 데이터·관계·스키마는 변경하지 않았습니다. 전체 골든셋 품질 검사는 별도입니다.
