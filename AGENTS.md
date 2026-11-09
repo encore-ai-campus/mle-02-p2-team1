@@ -27,7 +27,7 @@ src/bulsae/
   graphrag/
     prepare.py             뉴스 청크 생성 (외부 호출 없음)
     pipeline.py            추출, 근거 검사, 적재, 질의
-    graphs.py              LangGraph 구축, 질의 흐름 (추가 예정)
+    graphs.py              LangGraph 문서 기반 질의 흐름
     company_nodes.py       기업 노드 후보 생성
     README.md              파일럿 실행 안내
 data_code/                 수집과 실험 노트북
@@ -36,6 +36,7 @@ data_code/                 수집과 실험 노트북
   financials.ipynb         재무 자료
   graph.ipynb              그래프 개념, 청크 분할
   AuraDB.ipynb             Aura 적재, 임베딩
+  GraphRAG_질문_답변_테스트.ipynb 질문·답변과 출처 확인
 data/
   collected/               공통 수집 데이터
   processed/               청크 등 가공 결과
@@ -78,6 +79,20 @@ DART ─ company_info / financials.ipynb ──┤
 ### 그래프 모델
 
 `src/bulsae/graphrag/pipeline.py`가 기준입니다.
+
+아래 Claim/Chunk 구조는 기존 파일럿입니다. 사용자의 최신 설계에서는
+`BulsaeDocument.content` 전체에서 관계 후보를 추출하고 문서·청크 노드에
+지식그래프 관계선을 만들지 않습니다. `pipeline extract-documents`가 이 경로이며,
+후보 노드는 `BulsaeKGCandidate`와 공통 `Bulsae{유형}` 라벨을 사용하고 조사 대상
+기업은 기존 `BulsaeCompany.company_id`를 재사용합니다. 이름만으로 서로 다른
+문서의 후보를 물리적으로 병합하지 않습니다. 일부 후보는 근거를 확인해
+`NORMALIZED_AS`로 대표 노드에 연결하며 연결은 검토 전입니다. 검색은 해당 관계를
+따라 근거를 함께 읽되 대표 노드가 다른 동명이인을 섞지 않습니다. 팀원 `B_` 라벨
+데이터는 정규화 대상에서 제외합니다. 관계는 설계된 19개 유형 중 허용된 방향만
+사용하고 `kg_observation_id`, `source_document_id`, 문서 해시, 근거 줄·위치 및
+`verification_status='검토 전'`을 기록합니다. 기존 재무는 기업 ID로 연결한
+`HAS_FINANCIAL` 관계를 사용합니다. 자동 후보를 검증된 사실로 취급하지 않습니다.
+`private_data/` 체크포인트는 원문 근거가 포함될 수 있으므로 공유하지 않습니다.
 
 ```text
 (Document)-[:HAS_CHUNK]->(Chunk)
@@ -181,6 +196,11 @@ uv run python -m bulsae.graphrag.prepare <입력> <출력>  # 청크 생성
 
 인용이 원문에 있다는 검사는 내용이 사실이라는 뜻이 아닙니다. 기사는 "보도된 내용"으로 표현합니다.
 
+사용자 요청에 따라 질의 화면에서는 원문 대조와 자동 답변 검사를 통과한 내용을
+사람의 추가 승인 없이 표시합니다. 내부 `검토 전` 상태를 매 답변에 안내하지 않습니다.
+설명은 쉬운 한국어로 작성하고 원문 인용·출처는 별도로 제공합니다. 이 표시 정책은
+DB 상태를 사람 검증 완료로 바꾸거나 실제 근거 부족·불일치 검사를 생략하는 뜻이 아닙니다.
+
 ## 코드 스타일
 
 - 표준 라이브러리와 이미 설치된 패키지를 먼저 사용합니다.
@@ -198,3 +218,48 @@ uv run python -m bulsae.graphrag.prepare <입력> <출력>  # 청크 생성
 | `docs/guides/04_LangGraph_설계_가이드.md` | 처리 흐름 설계, 개선 접근 방법 |
 | `src/bulsae/graphrag/README.md` | 파이프라인 실행 |
 | `CONTRIBUTING.md` | 브랜치, PR 양식 |
+
+### 질의 근거 구분 (2026-11-09)
+
+질의 결과의 `source_kind=document`는 독립 원문 검색 결과이며 Neo4j 관계가 아니다.
+기존 그래프 결과와 함께 조회하되 품질 패널에 가상 관계를 만들지 않는다.
+질의 상태의 `document_search_count`, `financial_context_kind`, 경로의 `event_year`는
+런타임 메타데이터다. DB 노드·관계 필드를 추가하거나 사람 검토 상태를 변경하지 않는다.
+기업명 내부 공백은 허용하지만 법인·그룹·재단 이름의 경계는 유지한다.
+답변 생성 모델은 원문 구간의 번호(`quote_ids`)를 선택한다. 실제 `exact_quote`는
+코드가 복원하며, 잘못된 번호를 유사한 구간으로 추정해서 대신 연결하지 않는다.
+
+답변 뒤 공통 `enrich` 단계는 원래 `question`을 유지하며 관련 자료를 읽기 전용으로
+검색한다. `related_points`, `related_evidence`, `related_search_query`, `related_status`는
+`basic_answer`와 함께 런타임 필드다. 추가 문단은 보도 사실·회사 원인 설명·자료 종합 해석으로 구분하고
+인용과 의미 검사를 통과한 항목만 표시한다. 회사 원인 설명에는 회사의 직접 귀속,
+종합 해석에는 서로 다른 문서 둘 이상의 근거가 필요하다. 추가 분석 실패 시 기본
+답변은 유지하며 답변 이후 추천·후속 질문을 표시하지 않는다. DB 스키마는 바꾸지 않는다.
+
+골든셋 회귀 검사에서는 기존 질문과 기대답변을 바꾸지 않고 실제 응답을 따로 저장합니다.
+`joint_query`, 문단 `kind`/`section_type`, `trace.review_model`은 질의 결과 필드이며 DB 스키마가 아닙니다.
+기업 간 공동 관계 조회는 `resolved_multi`로 분기하며 정형 재무와 그룹 뉴스의 주체를 분리합니다.
+웹 검증 모델은 `BULSAE_REVIEW_MODEL`로 설정합니다. 회사의 계획 발표는 원인 설명으로 분류하지 않습니다.
+
+추가 분석의 의미 검사는 원래 질문에 대한 관련성을 별도로 확인합니다. 종합 해석에는
+서로 다른 전제가 필요하며 같은 URL·복제 인용만으로는 통과하지 않습니다.
+`related_errors`는 단계와 예외 유형만 보관하는 런타임 기록입니다. DB 필드가 아니며
+추가 분석 오류가 기본 답변·출처를 지우지 않도록 유지합니다.
+`related_diagnostics`도 런타임 기록으로, 분석 후보 수·인용 검사 통과 수·의미 검사 결과를 보관합니다.
+인용 원문에는 상대 날짜 표현이 있을 수 있습니다. 원문 일치 검사와 생성 답변의 날짜 검사를 구분합니다.
+
+재무 추가 분석은 `business_paths` 의존성으로 기존 불새 소유 사업 관계를 1~2홉 탐색한 뒤,
+관계별 `source_document_id`로 원문을 읽습니다. 부족한 기업·분석 관점만 원문 검색으로 보완합니다.
+`related_graph_paths`, `trace.graph_paths`, `trace.answer_graph_paths`, `trace.retrieved_graph_hops`는
+실행 기록입니다. 문서 ID 조회와 정규화 보조 링크를 사업 관계 홉으로 세지 않습니다.
+조회 경로와 최종 답변에 사용한 경로를 구분하고 팀원 `B_` 노드를 통과하지 않습니다.
+
+최종 `finalize` 단계는 채택된 답변의 사실·정형 수치로 요약과 LLM 분석을 작성합니다.
+이 단계의 해석에는 문서 2건 조건을 적용하지 않으며, 근거 있는 전제와 범위 보존을 검사합니다.
+이전 해석을 사실 전제로 재사용하지 않고, 분석의 불확실성 문구는 화면과 저장 답변에 한 번만 넣습니다.
+`final_output`과 `trace.final_composition`은 런타임 필드이며 DB 변경이 아닙니다.
+
+행사 참여 답변의 `event_cards`, `event_dashboard`는 런타임 출력입니다. 채택된 사실로
+행사별 소개와 발표·활동을 작성하고 실제 참석·주체·연도 검사를 통과한 카드만 표시합니다.
+행사 건수는 같은 행사·연도를 통합한 카드 수이며 근거 기사 수와 구분합니다.
+없는 행사 설명이나 발표 내용은 채우지 않습니다. DB 스키마·상태는 변경하지 않습니다.

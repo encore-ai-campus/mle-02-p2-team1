@@ -13,8 +13,18 @@ wheels/
 .env
 .env.*
 !.env.example
+.streamlit/secrets.toml
 
 # Local data and OS metadata
 private_data/*
 !private_data/*.ipynb
 .DS_Store
+
+# Collected article bodies and generated chunks stay local.
+data/collected/news.jsonl
+data/collected/news_sample.md
+data/processed/*.jsonl
+
+# The legacy web entrypoint serves this checked-in static page.
+!connect-ui/dist/
+!connect-ui/dist/index.html

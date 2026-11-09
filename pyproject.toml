@@ -9,11 +9,14 @@ authors = [
 requires-python = ">=3.12"
 dependencies = [
     "beautifulsoup4>=4.15.0",
+    "langgraph>=1.2.20",
     "markdownify>=1.2.3",
+    "neo4j>=6.4.1",
     "openai>=3.46.0",
     "pandas>=3.1.0",
     "python-dotenv>=1.2.4",
     "requests>=2.34.2",
+    "streamlit>=1.67.0",
     "tiktoken>=0.14.0",
 ]
 
