@@ -78,4 +78,25 @@ Neo4j 노드·관계·스키마·검토 상태는 변경하지 않습니다. 원
 
 ## 공개 배포와 구분
 
-`localhost:18573`은 로컬 Streamlit입니다. 기존 `.chatgpt.site` 정적 사이트와는 별개이며 이 변경으로 공개 주소가 자동 교체되지 않습니다. 외부 호스팅에는 Python 서버와 환경변수 설정이 필요합니다. 기존 `Dockerfile.streamlit`은 별도 배포 설정이며 이번 로컬 연결 검증에 포함되지 않습니다.
+Streamlit Community Cloud 배포 주소:
+https://mle-02-p2-team1-g8nyr7ga84jec3p54rbrzf.streamlit.app/
+
+| 배포 설정 | 값 |
+|---|---|
+| 저장소 | `encore-ai-campus/mle-02-p2-team1` |
+| 브랜치 | `main` |
+| 진입점 | `streamlit_app.py` |
+| Python | 3.12 |
+| 의존성 | `uv.lock`을 사용한 `uv sync` |
+| 접속 설정 | Community Cloud의 App settings → Secrets |
+
+Secrets에는 기존 환경의 `OPENAI_API_KEY`, `NEO4J_URI`, `NEO4J_USERNAME`,
+`NEO4J_PASSWORD`, `NEO4J_DATABASE`를 각각 TOML 문자열로 입력합니다.
+모델을 별도로 지정하려면 `BULSAE_LLM_MODEL`, `BULSAE_REVIEW_MODEL`도 설정합니다.
+비밀값은 GitHub 파일에 넣지 않습니다.
+
+클라우드 앱은 로컬 PC와 독립적으로 실행됩니다. `main`에 반영된 코드는 같은
+배포 주소에 적용됩니다. 기존 `.chatgpt.site` 주소와 `localhost:18573`은 별도 화면입니다.
+클라우드의 `private_data/query_runs/` 기록은 영구 보관용이 아니므로 필요한 답변은
+화면의 **답변 저장**으로 내려받습니다. 기존 `Dockerfile.streamlit`은 다른 Python
+호스팅 환경에 배포할 때 사용할 수 있습니다.
