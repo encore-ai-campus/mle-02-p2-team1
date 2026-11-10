@@ -50,8 +50,6 @@ private_data/              로컬 전용 파일 (Git 제외, 노트북은 S0-2 �
 
 | 경로 | 내용 | 예정 |
 |---|---|---|
-| `src/docs/`, `dashboard/` | 이전 주제인 과수 서비스 기록 | `docs/archive/orchard/`로 이동 |
-| `.codex/agents/` | 과수 아이디어 회의용 에이전트 | 현재 개발과 무관 |
 | `data_code/<기업>/` | 뉴스 수집 체크포인트 | Git 제외 |
 
 ## 아키텍처
