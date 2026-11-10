@@ -68,7 +68,7 @@ class EventDashboardTests(unittest.TestCase):
         with patch('bulsae.graphrag.streamlit_ui.run_question',return_value=result):
             app=AppTest.from_file(str(Path(__file__).resolve().parents[1]/'streamlit_app.py')).run()
             app.text_area[0].set_value(result['question'])
-            app.button[0].click().run()
+            app.button(key='submit_question').click().run()
             self.assertFalse(app.exception)
             self.assertNotIn('발표·활동 확인',[m.label for m in app.metric])
             self.assertNotIn('근거 기사',[m.label for m in app.metric])

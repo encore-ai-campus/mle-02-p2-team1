@@ -93,7 +93,7 @@ class StreamlitUITest(unittest.TestCase):
         with patch('bulsae.graphrag.streamlit_ui.run_question',return_value=result):
             app=AppTest.from_file(str(APP)).run()
             app.text_area[0].set_value(result['question'])
-            app.button[0].click().run()
+            app.button(key='submit_question').click().run()
             self.assertFalse(app.exception)
             self.assertEqual([s.value for s in app.subheader][:3],['재무 한눈에 보기','매출 주요 요인','✦ AI 통합분석'])
             texts=[m.value for m in app.markdown]
@@ -122,7 +122,7 @@ class StreamlitUITest(unittest.TestCase):
         with patch('bulsae.graphrag.streamlit_ui.run_question',return_value=result):
             app=AppTest.from_file(str(APP)).run()
             app.text_area[0].set_value(result['question'])
-            app.button[0].click().run()
+            app.button(key='submit_question').click().run()
             self.assertFalse(app.exception)
             self.assertEqual([x.value for x in app.caption].count(INFERENCE_NOTICE),1)
             self.assertIn('LLM 분석',[x.value for x in app.subheader])
@@ -142,7 +142,7 @@ class StreamlitUITest(unittest.TestCase):
         with patch('bulsae.graphrag.streamlit_ui.run_question', return_value=result):
             app = AppTest.from_file(str(APP)).run()
             app.text_area[0].set_value(result['question'])
-            app.button[0].click().run()
+            app.button(key='submit_question').click().run()
             self.assertEqual(len(app.exception), 0)
             self.assertTrue(any('123,456,789원' in x.value and '1억 2,345만 6,789원' in x.value for x in app.markdown))
             self.assertIn('2025년 · 연간 · 개별', [x.value for x in app.caption])
@@ -156,7 +156,7 @@ class StreamlitUITest(unittest.TestCase):
         with patch('bulsae.graphrag.streamlit_ui.run_question', side_effect=fail) as run:
             app = AppTest.from_file(str(APP)).run()
             app.text_area[0].set_value('시험 질문')
-            app.button[0].click().run()
+            app.button(key='submit_question').click().run()
             self.assertEqual(states, [True])
             self.assertFalse(app.session_state['is_loading'])
             self.assertFalse(app.button(key='retry_question').disabled)
@@ -188,7 +188,7 @@ class StreamlitUITest(unittest.TestCase):
         with patch('bulsae.graphrag.streamlit_ui.run_question', return_value=result) as run:
             app = AppTest.from_file(str(APP)).run()
             app.text_area[0].set_value('기업 질문')
-            app.button[0].click().run()
+            app.button(key='submit_question').click().run()
             self.assertEqual(len(app.exception), 0)
             run.assert_called_once_with('기업 질문')
             self.assertEqual(app.expander[0].label, '검색 과정과 근거 · 품질 확인')
@@ -206,7 +206,7 @@ class StreamlitUITest(unittest.TestCase):
     def test_blank_question_does_not_search(self):
         with patch('bulsae.graphrag.streamlit_ui.run_question') as run:
             app = AppTest.from_file(str(APP)).run()
-            app.button[0].click().run()
+            app.button(key='submit_question').click().run()
             run.assert_not_called()
             self.assertEqual(len(app.warning), 1)
 
@@ -219,7 +219,7 @@ class StreamlitUITest(unittest.TestCase):
         with patch('bulsae.graphrag.streamlit_ui.run_question',return_value=result):
             app=AppTest.from_file(str(APP)).run()
             app.text_area[0].set_value(result['question'])
-            app.button[0].click().run()
+            app.button(key='submit_question').click().run()
             self.assertEqual(len(app.exception),0)
             self.assertEqual(sum(s.value == '관련 분석' for s in app.subheader), 1)
             self.assertEqual(len(app.text_area), 0)
@@ -233,7 +233,7 @@ class StreamlitUITest(unittest.TestCase):
         with patch('bulsae.graphrag.streamlit_ui.run_question', return_value=result) as run:
             app = AppTest.from_file(str(APP)).run()
             app.text_area[0].set_value('첫 질문')
-            app.button[0].click().run()
+            app.button(key='submit_question').click().run()
             app.button(key='new_question').click().run()
             self.assertEqual(len(app.exception), 0)
             self.assertEqual(app.text_area[0].value, '')
@@ -242,7 +242,7 @@ class StreamlitUITest(unittest.TestCase):
             self.assertTrue(any('기업 정보는 한눈에, 분석은 더 깊게' in x.value for x in app.markdown))
             run.assert_called_once_with('첫 질문')
             app.text_area[0].set_value('두 번째 질문')
-            app.button[0].click().run()
+            app.button(key='submit_question').click().run()
             self.assertEqual(run.call_count, 2)
             self.assertEqual(run.call_args.args, ('두 번째 질문',))
             self.assertEqual(app.session_state['result']['question'], '두 번째 질문')
@@ -263,7 +263,7 @@ class StreamlitUITest(unittest.TestCase):
                     return result
                 run.side_effect = answer
                 app.text_area[0].set_value(question)
-                app.button[0].click().run()
+                app.button(key='submit_question').click().run()
             self.assertEqual(len(app.exception), 0)
             self.assertEqual(app.session_state['result']['status'], 'answered')
             self.assertFalse(any('<img src=x' in x.value for x in app.markdown))

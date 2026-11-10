@@ -3,6 +3,7 @@ import json
 import logging
 import os
 import re
+import sqlite3
 import time
 from copy import deepcopy
 from datetime import datetime
@@ -11,6 +12,7 @@ from urllib.parse import urlsplit
 from zoneinfo import ZoneInfo
 
 import streamlit as st
+from bulsae.graphrag import report_basket
 
 logger = logging.getLogger(__name__)
 
@@ -22,7 +24,7 @@ RELATIONS = {'WORKS_AT': '재직', 'PARTICIPATED_IN': '참여', 'ANNOUNCED_STRAT
              'FOCUSES_ON':'중점 사업', 'TARGETS_MARKET':'목표 시장', 'PRESENTED_AT':'발표 행사', 'RELATED_TO':'관련 행사'}
 CSS = """
 <style>
-.block-container{max-width:980px;padding-top:7rem;padding-bottom:5rem}
+.block-container{max-width:980px;padding-top:3.5rem;padding-bottom:5rem}
 h1{letter-spacing:-.055em;font-size:2.3rem!important;font-weight:650}h2{font-size:1.35rem!important}h3{font-size:1.12rem!important}
 .hero-title{margin:0 0 .55rem;font-size:clamp(2.3rem,5vw,3.7rem);font-weight:650;letter-spacing:-.065em;line-height:1.2;color:#302a2c;animation:arrive .65s ease-out both}
 .hero-subtitle{margin:0 0 2.4rem;font-size:1rem;color:#9b8d91;animation:arrive .65s .1s ease-out both}
@@ -37,6 +39,52 @@ h1{letter-spacing:-.055em;font-size:2.3rem!important;font-weight:650}h2{font-siz
 .revenue-korean{font-size:1rem;line-height:1.7;color:#946371;word-break:keep-all}
 .st-key-dashboard_toolbar{margin-bottom:1.2rem}
 .st-key-dashboard_toolbar button{font-size:.85rem;color:#946371}
+.st-key-save_to_basket{position:fixed!important;right:28px!important;bottom:28px!important;z-index:999999!important;width:auto!important}
+.st-key-save_to_basket button{background:#aa7182!important;border:0!important;color:#fff!important;border-radius:13px!important;min-height:46px!important;padding:.55rem 1.1rem!important;font-size:.9rem!important;font-weight:650!important;box-shadow:0 8px 24px rgba(84,45,60,.2)!important}
+.st-key-save_to_basket button:hover{background:#915b6c!important;color:#fff!important}
+.basket-toast{position:fixed;top:24px;left:50%;transform:translateX(-50%);z-index:1000001;background:rgba(27,23,25,.9);color:#fff;padding:13px 20px;border-radius:12px;box-shadow:0 8px 24px rgba(0,0,0,.18);font-size:.9rem;font-weight:600;white-space:nowrap;pointer-events:none;animation:basket-toast 3.5s ease forwards}
+@keyframes basket-toast{0%{opacity:0;transform:translate(-50%,-8px)}10%,80%{opacity:1;transform:translate(-50%,0)}100%{opacity:0;visibility:hidden;transform:translate(-50%,-8px)}}
+@media(max-width:600px){.st-key-save_to_basket{right:16px!important;bottom:16px!important}}
+.st-key-top_navigation{margin-bottom:2.4rem;gap:.5rem!important}
+.st-key-top_navigation button{border:1px solid #eadce1!important;border-radius:999px!important;background:#fff!important;color:#76515e!important;font-weight:600!important;padding:.42rem .95rem!important;min-height:2.5rem!important;box-shadow:0 2px 8px rgba(101,62,76,.04)}
+.st-key-top_navigation button:hover{border-color:#c997a6!important;color:#a15f76!important;background:#fbf3f6!important}
+.st-key-nav_basket{position:fixed!important;top:6px!important;right:56px!important;z-index:1000000!important;width:44px!important;height:44px!important}
+.st-key-nav_basket button{background:transparent!important;border:0!important;box-shadow:none!important;color:#986477!important;width:44px!important;height:44px!important;min-height:44px!important;padding:0!important;display:flex!important;align-items:center!important;justify-content:center!important}
+.st-key-nav_basket button:hover{background:transparent!important;color:#754455!important}
+.st-key-nav_basket button span[data-has-shortcut]{display:flex!important;align-items:center!important;justify-content:center!important;gap:0!important}
+.st-key-nav_basket button span[data-has-shortcut] > span:first-child{width:28px!important;height:28px!important;display:flex!important;align-items:center!important;justify-content:center!important}
+.st-key-nav_basket button span[data-testid="stIconMaterial"]{font-size:28px!important;width:28px!important;height:28px!important;font-variation-settings:'FILL' 1,'wght' 650,'GRAD' 0,'opsz' 24!important;line-height:1!important}
+.st-key-nav_basket button span[data-has-shortcut] > span[style]{display:block!important;position:absolute!important;width:1px!important;height:1px!important;overflow:hidden!important;clip:rect(0,0,0,0)!important}
+.st-key-nav_basket button p{position:absolute!important;width:1px!important;height:1px!important;padding:0!important;margin:-1px!important;overflow:hidden!important;clip:rect(0,0,0,0)!important;white-space:nowrap!important;border:0!important}
+.st-key-nav_question{position:fixed!important;top:6px!important;left:16px!important;z-index:1000000!important;width:44px!important;height:44px!important}
+.st-key-nav_question button{background:transparent!important;border:0!important;box-shadow:none!important;color:#986477!important;width:44px!important;height:44px!important;min-height:44px!important;padding:0!important;display:flex!important;align-items:center!important;justify-content:center!important}
+.st-key-nav_question button span[data-has-shortcut]{display:flex!important;align-items:center!important;justify-content:center!important;gap:0!important}
+.st-key-nav_question button span[data-has-shortcut] > span:first-child{width:26px!important;height:26px!important;display:flex!important;align-items:center!important;justify-content:center!important}
+.st-key-nav_question button span[data-testid="stIconMaterial"]{font-size:26px!important;width:26px!important;height:26px!important;line-height:1!important}
+.st-key-nav_question button span[data-has-shortcut] > span[style]{display:block!important;position:absolute!important;width:1px!important;height:1px!important;overflow:hidden!important;clip:rect(0,0,0,0)!important}
+.basket-hero{display:flex;align-items:center;gap:18px;margin:0 0 1.65rem}
+.basket-hero-icon{width:60px;height:60px;flex:0 0 60px;display:grid;place-items:center;background:#f2e1e7;border:1px solid #ead3dc;border-radius:19px;color:#a26579}
+.basket-hero-icon svg{width:30px;height:30px}
+.basket-eyebrow{font-size:.7rem;letter-spacing:.16em;color:#a67684;font-weight:700;margin-bottom:5px}
+.basket-title{font-size:clamp(1.75rem,4vw,2.3rem);line-height:1.2;letter-spacing:-.055em;font-weight:700;color:#382c30;margin:0}
+.basket-description{font-size:1rem;color:#856c74;line-height:1.65;margin:0 0 1rem}
+.basket-meta{display:inline-flex;align-items:center;gap:6px;border-radius:999px;padding:.4rem .8rem;background:#f6edf0;color:#906c78;font-size:.76rem;font-weight:600}
+.basket-empty{margin-top:2rem;min-height:300px;border:1px solid #eee0e5;border-radius:24px;background:linear-gradient(150deg,#fff,#fdf8fa);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:36px 24px}
+.basket-empty-icon{width:82px;height:82px;display:grid;place-items:center;border-radius:27px;background:#f7e9ee;color:#b07789;margin-bottom:23px}
+.basket-empty-icon svg{width:40px;height:40px}
+.basket-empty-title{font-size:1.15rem;font-weight:700;letter-spacing:-.04em;color:#4d3b42;margin:0 0 9px}
+.basket-empty-copy{font-size:.9rem;line-height:1.7;color:#9d8990;margin:0}
+.basket-list-heading{display:flex;align-items:baseline;justify-content:space-between;margin:2rem 0 .85rem;color:#6c4b57;font-size:.84rem;font-weight:700}
+.basket-list-heading span{font-weight:500;color:#ab909a}
+div[class*="st-key-basket_card_"]{background:#fff;border:1px solid #eee0e5!important;border-radius:20px!important;padding:1.35rem 1.5rem!important;box-shadow:0 8px 25px rgba(99,62,76,.045)}
+div[class*="st-key-basket_card_"] h3{color:#49353d!important;letter-spacing:-.035em}
+div[class*="st-key-basket_card_"] p{color:#755f67;line-height:1.7}
+div[class*="st-key-basket_remove_"] button{border:0!important;background:transparent!important;box-shadow:none!important;color:#a68d96!important;width:32px!important;height:32px!important;min-height:32px!important;padding:0!important;display:flex!important;align-items:center!important;justify-content:center!important}
+div[class*="st-key-basket_remove_"] button:hover{color:#764b5b!important;background:#f8edf1!important;border-radius:8px!important}
+div[class*="st-key-basket_remove_"] button span[data-has-shortcut]{display:flex!important;align-items:center!important;justify-content:center!important;gap:0!important}
+div[class*="st-key-basket_remove_"] button span[data-has-shortcut] > span[style]{display:block!important;position:absolute!important;width:1px!important;height:1px!important;overflow:hidden!important;clip:rect(0,0,0,0)!important}
+.st-key-download_basket_report button{border-radius:14px!important;min-height:3rem!important;font-weight:700!important}
+@media(max-width:600px){.basket-hero{gap:14px}.basket-hero-icon{width:52px;height:52px;flex-basis:52px;border-radius:16px}.basket-empty{min-height:260px}.st-key-top_navigation{margin-bottom:1.8rem}}
 .st-key-answer_dashboard{gap:1.25rem}
 .st-key-event_count,[class*="st-key-event_row_"]{width:100%;background:#fff;border:1px solid #eee5e7;border-radius:22px;box-shadow:0 6px 24px rgba(72,42,50,.025);min-width:0}
 .st-key-event_count{padding:1rem 1.5rem}
@@ -88,7 +136,7 @@ button{border-radius:12px!important}
 @keyframes question-rise{from{opacity:0;transform:translateY(32px) scale(.96);color:#a66e7c}to{opacity:1;transform:translateY(0) scale(1);color:#302a2c}}
 @keyframes question-mark{from{opacity:0;transform:scale(.65) rotate(-12deg)}to{opacity:1;transform:scale(1) rotate(0)}}
 @keyframes shimmer{to{background-position:-200% 0}}
-@media(max-width:600px){.block-container{padding-top:4rem}[data-testid="stForm"]{padding:1rem}.st-key-answer_dashboard [data-testid="stHorizontalBlock"]{flex-direction:column}.st-key-answer_dashboard [data-testid="stColumn"]{width:100%!important;flex:1 1 100%!important}.st-key-answer_overview,[class*="st-key-answer_card_"],[class*="st-key-analysis_card_"],[class*="st-key-financial_card_"]{padding:1.2rem}}
+@media(max-width:600px){.block-container{padding-top:3rem}[data-testid="stForm"]{padding:1rem}.st-key-answer_dashboard [data-testid="stHorizontalBlock"]{flex-direction:column}.st-key-answer_dashboard [data-testid="stColumn"]{width:100%!important;flex:1 1 100%!important}.st-key-answer_overview,[class*="st-key-answer_card_"],[class*="st-key-analysis_card_"],[class*="st-key-financial_card_"]{padding:1.2rem}}
 @media(prefers-reduced-motion:reduce){.loading-dots i,.loading-line,.hero-title,.hero-subtitle,.question-enter .question-title,.question-enter .question-mark,[data-testid="stForm"]{animation:none}}
 </style>
 """
@@ -164,6 +212,91 @@ def report_text(result):
             '주요 사업: ' + profile['business'] if profile.get('business') else '', news) if x))
     return '\n\n'.join(blocks + [result.get('answer', '')]) + '\n\n출처\n' + '\n'.join(
         f"[{s['number']}] {s['title']}\n{s['url']}" for s in result.get('sources', []))
+
+
+def basket_report(items):
+    """Combine saved snapshots without generating or rewriting their content."""
+    sections = ['CONNECT 보고서', f'담은 답변 {len(items)}건']
+    for index, item in enumerate(items, 1):
+        result = item['result']
+        sections.append(f"{'=' * 40}\n{index}. {result.get('question', '질문')}\n\n{report_text(result)}")
+    return '\n\n'.join(sections)
+
+
+def set_page(page):
+    st.session_state['current_page'] = page
+
+
+def use_local_basket():
+    """Disk storage is available only when explicitly enabled on a local host."""
+    return os.getenv('BULSAE_LOCAL_BASKET') == '1'
+
+
+def get_basket_items():
+    if use_local_basket():
+        return report_basket.list_answers()
+    return list(st.session_state.get('report_basket', []))
+
+
+def save_basket_answer(result):
+    if use_local_basket():
+        return report_basket.save_answer(result)
+    items = st.session_state.get('report_basket', [])
+    item_id = report_basket.answer_id(result)
+    if any(item['id'] == item_id for item in items):
+        return False
+    st.session_state['report_basket'] = [{'id': item_id,
+        'saved_at': datetime.now(ZoneInfo('Asia/Seoul')).isoformat(),
+        'result': deepcopy(result)}] + items
+    return True
+
+
+def remove_basket_answer(item_id):
+    if use_local_basket():
+        report_basket.remove_answer(item_id)
+    else:
+        st.session_state['report_basket'] = [item for item in st.session_state.get('report_basket', [])
+                                             if item['id'] != item_id]
+
+
+def render_basket(items):
+    box_icon = ('<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" '
+                'stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'
+                '<path d="M3.5 7.5 12 3l8.5 4.5v9L12 21l-8.5-4.5z"/>'
+                '<path d="m3.5 7.5 8.5 4.6 8.5-4.6M12 12.1V21M8 5.1l8.5 4.7"/></svg>')
+    with st.container(key='basket_intro', horizontal=True, horizontal_alignment='distribute',
+                      vertical_alignment='center', wrap=True):
+        st.markdown('<h1 class="basket-title">보고서 장바구니</h1>', unsafe_allow_html=True)
+        if items:
+            st.download_button('보고서 생성하기', data=basket_report(items),
+                               file_name='CONNECT_모아보기_보고서.txt', mime='text/plain',
+                               key='download_basket_report', type='primary', on_click='ignore', icon=':material/auto_awesome:')
+    if not use_local_basket():
+        st.caption('이 브라우저 세션에서만 보관돼요. 페이지를 새로고침하거나 닫기 전에 보고서를 저장해 주세요.')
+    if not items:
+        st.markdown('<div class="basket-empty"><div class="basket-empty-icon">' + box_icon +
+                    '</div><p class="basket-empty-title">아직 담아둔 답변이 없어요</p>'
+                    '<p class="basket-empty-copy">궁금한 기업을 살펴본 뒤<br>'
+                    '마음에 드는 답변을 장바구니에 담아보세요.</p></div>', unsafe_allow_html=True)
+        return
+    st.markdown(f'<div class="basket-list-heading">담아둔 답변 <span>{len(items)}개의 답변</span></div>',
+                unsafe_allow_html=True)
+    for item in items:
+        result = item['result']
+        with st.container(border=True, key='basket_card_' + item['id']):
+            with st.container(horizontal=True, horizontal_alignment='distribute', vertical_alignment='center'):
+                st.subheader(result.get('question') or '저장한 답변')
+                if st.button('장바구니에서 빼기', key='basket_remove_' + item['id'],
+                             icon=':material/close:', type='tertiary', help='장바구니에서 빼기'):
+                    remove_basket_answer(item['id'])
+                    st.rerun()
+            saved = publication_day(item['saved_at'])
+            if saved:
+                st.caption('담은 날짜 · ' + saved)
+            preview = ' '.join((result.get('lead') or result.get('answer') or '저장된 답변').split())
+            st.write(preview[:240] + ('…' if len(preview) > 240 else ''))
+            with st.expander('답변과 출처 보기'):
+                st.text(report_text(result))
 
 
 def publication_day(value):
@@ -476,6 +609,27 @@ def main():
     st.set_page_config(page_title='CONNECT · 기업 조사', page_icon='✳', layout='wide')
     configure_secrets()
     st.markdown(CSS, unsafe_allow_html=True)
+    try:
+        basket_items = get_basket_items()
+    except (OSError, ValueError, sqlite3.Error):
+        basket_items = []
+        st.error('저장한 답변을 불러오지 못했어요. 로컬 저장 공간을 확인해 주세요.')
+    if basket_items:
+        st.markdown(f'<style>.st-key-nav_basket::after{{content:"{len(basket_items)}";position:absolute;'
+                    'right:0;bottom:0;min-width:19px;height:19px;padding:0 4px;box-sizing:border-box;'
+                    'display:flex;align-items:center;justify-content:center;border-radius:999px;'
+                    'background:#a86f81;color:#fff;border:2px solid #faf7f8;font-size:10px;font-weight:700;'
+                    'line-height:1;pointer-events:none}</style>', unsafe_allow_html=True)
+    with st.container(key='top_navigation', horizontal=True, horizontal_alignment='right'):
+        if st.session_state.get('current_page') == 'basket':
+            st.button('뒤로 가기', key='nav_question', type='tertiary', help='질문 화면으로 돌아가기',
+                      on_click=set_page, args=('question',), icon=':material/arrow_back:')
+        else:
+            st.button('보고서 장바구니', key='nav_basket', type='tertiary', help='보고서 장바구니',
+                      on_click=set_page, args=('basket',), icon=':material/shopping_cart:')
+    if st.session_state.get('current_page') == 'basket':
+        render_basket(basket_items)
+        return
     pending = st.session_state.pop('pending_question', None)
     result = st.session_state.get('result')
     if pending or result:
@@ -511,6 +665,17 @@ def main():
             else:
                 st.download_button('답변 저장', data=report_text(result), file_name='CONNECT_기업조사.txt',
                                    mime='text/plain', key='download_answer', on_click='ignore', type='tertiary')
+                if st.button('장바구니 담기', key='save_to_basket', type='primary', icon=':material/shopping_cart:'):
+                    try:
+                        saved = save_basket_answer(result)
+                        st.session_state['basket_message'] = '보고서 장바구니에 담았어요.' if saved else '이미 장바구니에 담긴 답변이에요.'
+                        st.rerun()
+                    except (OSError, ValueError, sqlite3.Error):
+                        st.error('답변을 저장하지 못했어요. 로컬 저장 공간을 확인해 주세요.')
+        if st.session_state.get('basket_message'):
+            message = escape(st.session_state.pop('basket_message'))
+            st.markdown(f'<div class="basket-toast" role="status" aria-live="polite">{message}</div>',
+                        unsafe_allow_html=True)
         render_answer(result)
         render_quality(result)
         return
