@@ -12,6 +12,130 @@ def evidence(**overrides):
 
 
 class QueryGraphTests(unittest.TestCase):
+    def test_combined_overview_and_financial_preserve_both_sources(self):
+        import json
+        from bulsae.graphrag.web_server import present_response
+        plan = dict(company_overview=True, financial=True, graph_context=False, executive_events=False,
+                    financial_metrics=['revenue'], executive_role='none', event_year=None)
+        source = json.dumps({'main_business':[{'original_url':'https://example.org/info'}]})
+        finance = {'name':'가온','financial_id':'F1','year':2025,'period':'연간','scope':'개별',
+                   'revenue':100,'source_json':json.dumps([{'original_url':'https://example.org/finance'}])}
+        deps = QueryDeps(lambda *_:[], lambda *_:[], lambda *_:set(),
+            identify=lambda _: {'status':'resolved','name':'가온','kind':'company'},
+            company_info=lambda _: [{'name':'가온','company_id':'C1','business':'화장품 제조', 'sources':source}],
+            financial=lambda _: [finance], combined_plan=lambda *_:plan)
+        result = build_query_graph(deps).invoke({'question':'가온 회사 소개와 2025년 매출을 알려줘'})
+        response = present_response(result)
+        self.assertEqual(result['status'], 'answered')
+        self.assertIn('화장품 제조', response['answer'])
+        self.assertEqual(response['financial_cards'][0]['value'],100)
+        self.assertEqual(len(response['sources']),2)
+        self.assertEqual(response['financial_cards'][0]['source_number'],2)
+        self.assertEqual([c['task'] for c in response['trace']['components']],['company_info','financial'])
+
+    def test_combined_never_substitutes_2025_for_other_year(self):
+        from unittest.mock import Mock
+        plan = dict(company_overview=True, financial=True, graph_context=False, executive_events=False,
+                    financial_metrics=['revenue'], executive_role='none', event_year=None)
+        financial = Mock()
+        deps = QueryDeps(lambda *_:[], lambda *_:[], lambda *_:set(),
+            identify=lambda _: {'status':'resolved','name':'가온','kind':'company'},
+            company_info=lambda _: [], financial=financial, combined_plan=lambda *_:plan)
+        result = build_query_graph(deps).invoke({'question':'가온 회사 소개와 2026년 매출을 알려줘'})
+        financial.assert_not_called()
+        self.assertIn('2025년 자료',result['component_runs'][1]['result']['answer'])
+
+    def test_combined_event_and_finance_use_separate_queries(self):
+        import json
+        from unittest.mock import Mock
+        plan = dict(company_overview=False, financial=True, graph_context=False, executive_events=True,
+                    financial_metrics=['revenue'], executive_role='ceo', event_year=2025)
+        finance = {'name':'가온','financial_id':'F1','year':2025,'period':'연간','scope':'개별',
+                   'revenue':100,'source_json':json.dumps([{'original_url':'https://example.org/finance'}])}
+        search_events = Mock(return_value=[])
+        deps = QueryDeps(lambda *_:[], lambda *_:[], lambda *_:set(),
+            identify=lambda _: {'status':'resolved','name':'가온','kind':'company'},
+            financial=lambda _: [finance], combined_plan=lambda *_:plan,
+            analyze=lambda q, n: {'status':'executive_events','role':'ceo','year':2025},
+            multihop=search_events)
+        result = build_query_graph(deps).invoke({'question':'가온 2025년 매출과 대표가 참석한 행사를 알려줘'})
+        self.assertEqual(result['status'], 'partial_evidence')
+        self.assertEqual(result['component_runs'][0]['result']['status'], 'answered')
+        self.assertEqual(result['component_runs'][1]['result']['status'], 'insufficient_evidence')
+        search_events.assert_called_once_with('가온','ceo',2025)
+
+    def test_combined_comparison_does_not_mix_companies(self):
+        import json
+        from bulsae.graphrag.web_server import present_response
+        plan = dict(company_overview=False, financial=True, graph_context=False, executive_events=False,
+                    financial_metrics=['revenue'], executive_role='none', event_year=None)
+        rows = [{'name':name,'financial_id':'F'+name,'year':2025,'period':'연간','scope':'개별',
+                 'revenue':value,'source_json':json.dumps([{'original_url':'https://example.org/'+name}])}
+                for name,value in [('가온',100),('나래',40)]]
+        deps = QueryDeps(lambda *_:[], lambda *_:[], lambda *_:set(),
+            identify=lambda _: {'status':'resolved_compare','entities':[{'name':n,'kind':'company'} for n in ('가온','나래')]},
+            financial=lambda names: [r for r in rows if r['name'] in names], combined_plan=lambda *_:plan)
+        response = present_response(build_query_graph(deps).invoke({'question':'가온과 나래의 2025년 매출 비교'}))
+        self.assertEqual([(c['company'],c['value']) for c in response['financial_cards']], [('가온',100),('나래',40)])
+        self.assertIn('60원',response['answer'])
+        self.assertNotEqual(response['financial_cards'][0]['source_number'],response['financial_cards'][1]['source_number'])
+
+    def test_unsupported_metric_cannot_be_rewritten_as_operating_profit(self):
+        from unittest.mock import Mock
+        plan = dict(company_overview=False, financial=True, graph_context=False, executive_events=False,
+                    financial_metrics=['operating_profit'], executive_role='none', event_year=None)
+        finance = Mock()
+        deps = QueryDeps(lambda *_:[], lambda *_:[], lambda *_:set(),
+            identify=lambda _: {'status':'resolved','name':'가온','kind':'company'},
+            financial=finance, combined_plan=lambda *_:plan)
+        result = build_query_graph(deps).invoke({'question':'가온 2025년 영업이익률을 알려줘'})
+        finance.assert_not_called()
+        self.assertEqual(result['status'], 'insufficient_evidence')
+
+
+    def test_semantic_plan_combines_company_overview_and_related_search(self):
+        import json
+        from unittest.mock import Mock
+        source = json.dumps({'main_business':[{'original_url':'https://example.org'}]})
+        search = Mock(return_value=[])
+        docs = Mock(return_value=[])
+        plan = Mock(return_value={'company_overview':True, 'graph_context':True})
+        deps = QueryDeps(search, Mock(), Mock(),
+            identify=lambda _: {'status':'resolved','name':'가온','kind':'company'},
+            company_info=lambda _: [{'name':'가온','company_id':'C1','business':'화장품 제조', 'sources':source}],
+            plan=plan, documents=docs, related=lambda *_: [])
+        question = '가온 기업을 소개하고 최근 전략도 알려줘'
+        result = build_query_graph(deps).invoke({'question':question})
+        self.assertEqual(result['status'], 'answered')
+        self.assertIn('화장품 제조', result['basic_answer'])
+        self.assertEqual(result['question'], question)
+        self.assertEqual(result['search_plan']['source'], 'llm')
+        search.assert_called_once()
+        docs.assert_called_once()
+
+    def test_plan_failure_uses_rules_and_no_missing_info_fabricated(self):
+        from unittest.mock import Mock
+        plan = Mock(side_effect=RuntimeError('unavailable'))
+        search = Mock(return_value=[])
+        deps = QueryDeps(search, Mock(), Mock(),
+            identify=lambda _: {'status':'resolved','name':'가온','kind':'company'},
+            company_info=lambda _: [], plan=plan)
+        result = build_query_graph(deps).invoke({'question':'가온 기업에 대해 알려줘'})
+        self.assertEqual(result['search_plan']['source'], 'rule_fallback')
+        self.assertEqual(result['status'], 'insufficient_evidence')
+        self.assertEqual(result['answer'], ABSTAIN)
+        search.assert_called_once()
+
+    def test_non_overview_plan_uses_graph_search(self):
+        from unittest.mock import Mock
+        company_info = Mock()
+        deps = QueryDeps(lambda *_:[], Mock(), Mock(),
+            identify=lambda _: {'status':'resolved','name':'가온','kind':'company'},
+            company_info=company_info, plan=lambda *_: {'company_overview':False, 'graph_context':True})
+        result = build_query_graph(deps).invoke({'question':'가온이 협력한 회사는?'})
+        self.assertEqual(result['status'], 'insufficient_evidence')
+        company_info.assert_not_called()
+
     def test_strategy_question_uses_announced_strategy_evidence(self):
         calls = []
         row = evidence(evidence='가온은 해외 사업 확대 전략을 발표했다.', relation='ANNOUNCED_STRATEGY')

@@ -8,6 +8,40 @@ APP = Path(__file__).resolve().parents[1] / 'streamlit_app.py'
 
 
 class StreamlitUITest(unittest.TestCase):
+    def test_company_overview_order_and_bounded_news(self):
+        result={'question':'회사 소개','status':'answered','answer':'회사 소개','sources':[],'trace':{},
+            'company_profiles':[{'name':'가온','fields':[{'label':'업종','value':'화장품'}],
+                'business':'화장품 제조','recent_status':'found',
+                'news':[{'heading':f'소식 {i}','text':f'기사 내용 {i}','published_at':'2026-11-05'} for i in range(4)]}],
+            'sections':[{'heading':'의미','text':'자료에 기반한 해석','kind':'interpretation','section_type':'additional'}]}
+        with patch('bulsae.graphrag.streamlit_ui.run_question',return_value=result):
+            app=AppTest.from_file(str(APP)).run()
+            app.text_area[0].set_value(result['question'])
+            app.button(key='submit_question').click().run()
+            headings=[s.value for s in app.subheader]
+            self.assertEqual(headings[:3],['기업 한눈에 보기','주요 사업','최근 소식'])
+            self.assertIn('소식 2',headings)
+            self.assertNotIn('소식 3',headings)
+            self.assertIn('✦ AI 통합분석',headings)
+            self.assertFalse(app.exception)
+
+    def test_combined_financial_and_event_answer_displays_both(self):
+        result = {'question':'복합 질문','status':'partial_evidence','answer':'재무 및 행사 결과',
+                  'sources':[],'trace':{},
+                  'financial_cards':[{'company':'가온','label':'매출액','value':100,
+                                      'year':2025,'period':'연간','scope':'개별'}],
+                  'event_cards':[{'name':'투자자 행사','year':2025,'participants':['홍길동'],
+                                  'description':'투자자 행사입니다.','activity':'전략을 발표했어요.','sources':[]}],
+                  'sections':[{'heading':'확인하지 못한 항목','text':'추가 근거가 부족해요.', 'section_type':'basic'}]}
+        with patch('bulsae.graphrag.streamlit_ui.run_question',return_value=result):
+            app=AppTest.from_file(str(APP)).run()
+            app.text_area[0].set_value(result['question'])
+            app.button(key='submit_question').click().run()
+            self.assertFalse(app.exception)
+            self.assertIn('투자자 행사',[s.value for s in app.subheader])
+            self.assertTrue(any('100원' in m.value for m in app.markdown))
+            self.assertTrue(any('추가 근거가 부족해요' in m.value for m in app.markdown))
+
     def test_session_cache_reuses_only_exact_questions_without_mutating_sources(self):
         from bulsae.graphrag.streamlit_ui import run_question
         state = {}
@@ -53,7 +87,7 @@ class StreamlitUITest(unittest.TestCase):
             self.assertFalse(app.exception)
             self.assertEqual([s.value for s in app.subheader][:3],['재무 한눈에 보기','매출 주요 요인','✦ AI 통합분석'])
             texts=[m.value for m in app.markdown]
-            self.assertIn('#### 연결 사업 · 브랜드 성장',texts)
+            self.assertIn('#### 브랜드 성장 (연결 사업 기준)',texts)
             self.assertIn('- 회사는 해외 판매가 늘었다고 밝혔어요.\n- 신규 채널을 확보했어요.',texts)
             self.assertIn('- 판매 접점 확대가 기여했을 가능성이 있어요.',texts)
             self.assertNotIn('#### 2025년 매출',texts)

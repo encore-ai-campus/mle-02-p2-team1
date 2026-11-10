@@ -94,8 +94,10 @@ def final_answer_facts(response):
         facts.append({'id':len(facts), 'heading':section.get('heading',''),
                       'text':section['text'], 'sources':section['sources']})
     if response.get('lead') and response.get('sources'):
+        company_sources = response.get('company_overview', {}).get('business_sources')
         facts.append({'id':len(facts),'heading':'기본 답변','text':response['lead'],
-                      'sources':[s['number'] for s in response['sources'] if s.get('source_file')]})
+                      'sources':company_sources if company_sources is not None else
+                          [s['number'] for s in response['sources'] if s.get('source_file')]})
     for card in response.get('financial_cards', []):
         refs = [s['number'] for s in response.get('sources', []) if s.get('source_file') == 'financials.jsonl'
                 and card.get('company','') in s.get('title','')]

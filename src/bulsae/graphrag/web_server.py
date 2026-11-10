@@ -42,8 +42,75 @@ def merge_repeated_sections(sections):
     return kept
 
 
+def present_combined_response(result):
+    """Combine independently verified task results while keeping citation mappings."""
+    merged = {'answer':'', 'status':result['status'], 'lead':'', 'sections':[], 'sources':[],
+              'financial_cards':[], 'event_cards':[], 'company_profiles':[], 'trace':{'connections':[], 'graph_paths':[],
+              'answer_graph_paths':[], 'steps':['질문 분석과 검색 계획', '요청별 검색 및 근거 확인'],
+              'components':[], 'search_plan':result.get('combined_plan', {}), 'hops':0, 'retrieved_records':0}}
+    source_map = {}
+    answers = []
+    for item in result['component_runs']:
+        part = present_response(item['result'])
+        merged['trace']['components'].append({'task':item['task'], 'status':part['status'],
+            'executed_nodes':item['executed_nodes'], 'trace':part['trace']})
+        if part['status'] not in ('answered','partial_evidence'):
+            merged['sections'].append({'heading':'확인하지 못한 항목', 'text':part['answer'],
+                                       'sources':[], 'section_type':'basic'})
+            answers.append(part['answer'])
+            continue
+        nums = {}
+        for source in part['sources']:
+            key = (source.get('document_id'), source.get('url'))
+            if key not in source_map:
+                source_map[key] = len(merged['sources']) + 1
+                merged['sources'].append({**source, 'number':source_map[key], 'quotes':list(source.get('quotes', []))})
+            else:
+                existing = merged['sources'][source_map[key]-1]['quotes']
+                for quote in source.get('quotes', []):
+                    if quote not in existing:
+                        existing.append(quote)
+            nums[source['number']] = source_map[key]
+        if part.get('company_overview'):
+            overview = part['company_overview']
+            merged['company_profiles'].append({**overview,
+                'fields':[{**f,'source_number':nums.get(f.get('source_number'))} for f in overview['fields']],
+                'business_sources':[nums[n] for n in overview.get('business_sources', []) if n in nums],
+                'news':[{**n,'source_number':nums.get(n.get('source_number'))} for n in overview['news']]})
+        if part.get('lead') and not part.get('company_overview'):
+            heading = '기업 기본정보' if item['task'] == 'company_info' else ('재무 기준' if item['task'] == 'financial' else '확인한 내용')
+            merged['sections'].append({'heading':heading, 'text':part['lead'],
+                'sources':[nums[s['number']] for s in part['sources']], 'section_type':'basic'})
+        for section in part.get('sections', []):
+            if part.get('company_overview') and section.get('section_type') != 'additional':
+                continue
+            merged['sections'].append({**section, 'sources':[nums[n] for n in section.get('sources', []) if n in nums]})
+        for card in part.get('financial_cards', []):
+            merged['financial_cards'].append({**card, 'source_number':nums.get(card.get('source_number'))})
+        for card in part.get('event_cards', []):
+            merged['event_cards'].append({**card, 'sources':[nums[n] for n in card.get('sources', []) if n in nums]})
+        for connection in part['trace'].get('connections', []):
+            merged['trace']['connections'].append({**connection, 'source_number':nums.get(connection.get('source_number'))})
+        for key in ('graph_paths','answer_graph_paths'):
+            merged['trace'][key].extend(part['trace'].get(key, []))
+        merged['trace']['hops'] = max(merged['trace']['hops'], part['trace'].get('hops', 0))
+        merged['trace']['retrieved_records'] += part['trace'].get('retrieved_records', 0)
+        answers.append(part['answer'])
+    merged['sections'] = merge_repeated_sections(merged['sections'])
+    merged['answer'] = '\n\n'.join(answers)
+    if merged['event_cards']:
+        from bulsae.graphrag.related_analysis import merge_event_cards
+        merged['event_cards'] = merge_event_cards(merged['event_cards'])
+    if any(s.get('kind') == 'interpretation' for s in merged['sections']):
+        from bulsae.graphrag.related_analysis import INFERENCE_NOTICE
+        merged['analysis_notice'] = INFERENCE_NOTICE
+    return merged
+
+
 def present_response(result):
     """Separate readable explanations from their original, deduplicated sources."""
+    if result.get('component_runs'):
+        return present_combined_response(result)
     if 'basic_answer' in result:
         result = {**result, 'answer':result['basic_answer']}
     response = {'answer': result.get('answer', '답변을 만들지 못했어요.'),
@@ -149,6 +216,23 @@ def present_response(result):
         for paragraph in paragraphs:
             clean = '\n'.join(line for line in paragraph.splitlines() if not line.strip().startswith('근거:'))
             sections.append({'heading':'', 'text':clean, 'sources':[s['number'] for s in sources]})
+    if result.get('trace_kind') == 'company_info':
+        profile = []
+        company_id = next((s.get('document_id') for s in result.get('structured_sources', [])), result.get('name', 'company'))
+        for field in result.get('company_profile', []):
+            number = add_source({'document_id':company_id, 'url':field.get('source_url') or '',
+                'title':field['label'] + ' 정보', 'source_file':field['source_file'], 'source_kind':'structured'},
+                [field['label'] + ': ' + field['value']])
+            profile.append({**field, 'source_number':number})
+        news = []
+        for item in result.get('recent_news', [])[:3]:
+            number = add_source(item, [item['evidence']])
+            news.append({**item, 'source_number':number})
+            sections.append({'heading':item['heading'], 'text':item['text'], 'sources':[number],
+                             'kind':item.get('kind','reported_fact'), 'section_type':'basic'})
+        response['company_overview'] = {'name':result.get('name',''), 'fields':profile,
+            'business':result.get('company_business'), 'business_sources':financial_refs,
+            'news':news, 'recent_status':result.get('recent_status','unavailable')}
     if sections:
         response['answer'] = '\n\n'.join((section['heading'] + '\n' if section['heading'] else '') + section['text'] for section in sections)
         if result.get('financial_answer'):
@@ -216,6 +300,8 @@ def present_response(result):
     response['trace']['hops'] = max(response['trace'].get('hops', 1 if connections else 0),
                                   max((p['hops'] for p in used_paths), default=0))
     response['trace']['source_count'] = len(sources)
+    if result.get('search_plan'):
+        response['trace']['search_plan'] = result['search_plan']
     response['trace']['steps'] = (['기업과 인물 식별', '재직 관계와 행사 참여 관계 조회', '연결된 기사 원문 대조', '질문에 맞는 설명 생성·검사']
         if result.get('paths') else ['대상 식별', '질문에 맞는 자료 조회', '근거 확인 및 답변 작성'])
     if result.get('related_status') not in (None, 'skipped'):
@@ -301,8 +387,8 @@ def execute_question(question, *, limit=200, name=None, kind=None, model=None, r
     from bulsae.graphrag.document_search import fetch_evidence, fetch_strategy_evidence, fetch_document_context, generate_claims, review_claims, fetch_business_paths
     from bulsae.graphrag.entity_resolution import resolve_question
     from bulsae.graphrag.financial_comparison import fetch_financials
-    from bulsae.graphrag.company_information import fetch_company_business
-    from bulsae.graphrag.question_analysis import analyze_question
+    from bulsae.graphrag.company_information import fetch_company_business, fetch_recent_company_news
+    from bulsae.graphrag.question_analysis import analyze_question, plan_company_question, plan_question
     from bulsae.graphrag.multihop_search import fetch_executive_events
     from bulsae.graphrag.document_fallback import fetch_document_evidence
     from bulsae.graphrag.graphs import QueryDeps, build_query_graph
@@ -328,6 +414,11 @@ def execute_question(question, *, limit=200, name=None, kind=None, model=None, r
             strategy=lambda name, year: fetch_strategy_evidence(db, name, year),
             context=lambda ids: fetch_document_context(db, ids),
             company_info=lambda name: fetch_company_business(db, name),
+            recent_news=lambda name: fetch_recent_company_news(db, name,
+                lambda question, evidence: generate_claims(client(), model, question, evidence),
+                lambda question, claims, evidence: review_claims(client(), review_model, question, claims, evidence)),
+            plan=lambda question, name: plan_company_question(client(), model, question, name),
+            combined_plan=lambda question, names: plan_question(client(), model, question, names),
             analyze=lambda question, name: analyze_question(client(), model, question, name),
             multihop=lambda name, role, year: fetch_executive_events(db, name, role, year),
             documents=lambda question, names: fetch_document_evidence(db, question, names),

@@ -3,7 +3,7 @@
 External connections are supplied as dependencies. The graph holds no clients,
 credentials or embeddings, has no checkpoint, and performs no database writes.
 """
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 from concurrent.futures import ThreadPoolExecutor
 import re
 from typing import Callable, TypedDict
@@ -92,6 +92,14 @@ class QueryState(TypedDict, total=False):
     related_graph_paths: list[dict]
     basic_answer: str
     final_output: dict
+    search_plan: dict
+    combined_plan: dict
+    component_runs: list[dict]
+    forced_route: str
+    company_profile: list[dict]
+    company_business: str | None
+    recent_news: list[dict]
+    recent_status: str
 
 
 @dataclass(frozen=True)
@@ -110,6 +118,9 @@ class QueryDeps:
     business_paths: Callable[[str, str], list[dict]] | None = None
     related: Callable[[str, str, list[dict], bool], list[dict]] | None = None
     compose: Callable[[str, dict], dict] | None = None
+    plan: Callable[[str, str], dict] | None = None
+    combined_plan: Callable[[str, list[str]], dict] | None = None
+    recent_news: Callable[[str], list[dict]] | None = None
 
 
 def build_query_graph(deps: QueryDeps):
@@ -457,6 +468,13 @@ def build_query_graph(deps: QueryDeps):
         except Exception:
             return {'answer':FAILURE, 'status':'search_error'}
 
+    def company_recent(state):
+        try:
+            items = deps.recent_news(state['name'])
+            return {'recent_news':items[:3], 'recent_status':'found' if items else 'empty'}
+        except Exception:
+            return {'recent_news':[], 'recent_status':'unavailable'}
+
     def financial_background(state):
         years = set(re.findall(r'(?<!\d)(20\d{2})(?!\d)', state['question']))
         if years != {'2025'} or any(w in state['question'] for w in ('분기','반기','연결','전년','증감','추이')):
@@ -545,13 +563,104 @@ def build_query_graph(deps: QueryDeps):
             return {'evidence': evidence, 'claims': [], 'supported': [], 'trace_kind': 'executive_events',
                     'document_search_count':len(originals)}
 
+    def plan_question(state):
+        try:
+            plan = deps.plan(state['question'], state['name'])
+            if not isinstance(plan, dict) or any(type(plan.get(k)) is not bool for k in ('company_overview', 'graph_context')):
+                raise ValueError('invalid search plan')
+            return {'search_plan': {**plan, 'source': 'llm'}}
+        except Exception:
+            return {'search_plan': {'company_overview': is_business_question(state['question']),
+                                    'graph_context': True, 'source': 'rule_fallback'}}
+
+    def combined_search(state):
+        from bulsae.graphrag.question_analysis import CombinedSearchPlan
+        names = [e['name'] for e in state.get('entities', [])] or [state['name']]
+        question = state['question']
+        try:
+            plan = CombinedSearchPlan.model_validate(deps.combined_plan(question, names)).model_dump()
+            years = {int(y) for y in re.findall(r'(?<!\d)(20\d{2})(?!\d)', question)}
+            if plan['event_year'] is not None and plan['event_year'] not in years:
+                raise ValueError('unsupported event year')
+            if plan['executive_events'] and len(years) > 1:
+                raise ValueError('ambiguous time attribution')
+            role = plan['executive_role']
+            if plan['executive_events'] and ((role == 'ceo' and not re.search(r'대표|CEO|최고경영자', question, re.I))
+                    or (role == 'chair' and '회장' not in question) or role == 'none'):
+                raise ValueError('unsupported executive role')
+            if 'revenue' in plan['financial_metrics'] and not re.search(r'매출|매상|판매액', question):
+                raise ValueError('unsupported revenue metric')
+            if 'operating_profit' in plan['financial_metrics'] and not re.search(r'영업\s*이익', question):
+                raise ValueError('unsupported operating profit metric')
+            if not any(plan[k] for k in ('company_overview','financial','graph_context','executive_events')):
+                raise ValueError('empty plan')
+        except Exception:
+            return {'combined_plan':{'source':'rule_fallback'}, 'status':'plan_fallback'}
+
+        plan['source'] = 'llm'
+        tasks = []
+        if plan['company_overview']:
+            tasks.extend(('company_info', name, question) for name in names)
+        if plan['financial']:
+            _, error = financial_request(question)
+            if error and '여러 주제를 결합' not in error:
+                tasks.append(('unavailable', 'financial', error))
+            elif not plan['financial_metrics']:
+                tasks.append(('unavailable', 'financial', '재무 지표를 매출액 또는 영업이익으로 구체적으로 알려주세요.'))
+            else:
+                metrics = ' '.join('매출' if x == 'revenue' else '영업이익' for x in plan['financial_metrics'])
+                tasks.append(('financial', names[0], '2025년 ' + metrics + (' 비교' if len(names)>1 else '')))
+        if plan['executive_events']:
+            if len(names) != 1:
+                tasks.append(('unavailable', 'executive_events', '대표 행사 조회는 기업별로 구분해 확인해야 해요.'))
+            else:
+                role = '대표' if plan['executive_role'] == 'ceo' else '회장'
+                year = f"{plan['event_year']}년 " if plan['event_year'] else ''
+                tasks.append(('analyze', names[0], f'{names[0]} {role}가 {year}참석한 행사 알려줘'))
+        if plan['graph_context']:
+            tasks.append(('retrieve', names[0], question))
+        subgraph = build_query_graph(replace(deps, combined_plan=None, plan=None))
+        components = []
+        for route, name, subquestion in tasks:
+            if route == 'unavailable':
+                components.append({'task':name, 'result':{'status':'unsupported_query', 'answer':subquestion}, 'executed_nodes':[]})
+                continue
+            initial = {'question':subquestion, 'name':name, 'kind':'company', 'forced_route':route,
+                       'limit':state.get('limit', 100)}
+            if route == 'retrieve' and (plan['financial'] or plan['company_overview'] or plan['executive_events']):
+                initial['evidence_question'] = (question + '\n재무 수치, 기업 기본 소개, 대표 행사 중 다른 조회에서 처리하는 항목은 반복하지 마라. '
+                    '이 검색에서는 질문에서 별도로 요청한 전략·관계·사업 등 기사 근거가 있는 항목만 답하라. '
+                    '기간과 대상이 근거에 나타나지 않으면 만들지 마라.')
+            if route in ('financial', 'retrieve') and len(names) > 1:
+                initial['entities'] = [{'name':n, 'kind':'company'} for n in names]
+                if route == 'retrieve' and state.get('joint_query'):
+                    initial['joint_query'] = True
+            updates, result = [], initial
+            try:
+                for mode, payload in subgraph.stream(initial, stream_mode=['updates', 'values']):
+                    if mode == 'values':
+                        result = payload
+                    else:
+                        updates.extend(k for k in payload if not k.startswith('__'))
+            except Exception:
+                result = {'status':'search_error', 'answer':FAILURE}
+            components.append({'task':route, 'result':result, 'executed_nodes':updates})
+        success = sum(c['result'].get('status') in ('answered','partial_evidence') for c in components)
+        status = ('answered' if success == len(components) else 'partial_evidence') if success else 'insufficient_evidence'
+        return {'combined_plan':plan, 'component_runs':components, 'status':status,
+                'answer': '요청한 자료를 확인했어요.' if success else '요청한 자료의 근거를 확인하지 못했어요.'}
+
     graph = StateGraph(QueryState)
     for name, node in (('finalize', finalize), ('enrich', enrich), ('financial_background', financial_background), ('identify', identify), ('retrieve', retrieve), ('generate', generate),
-                       ('review', review), ('answer', answer), ('abstain', abstain), ('clarify', clarify), ('financial', financial), ('mixed', mixed), ('expand_context', expand_context), ('company_info', company_info), ('analyze', analyze), ('multihop', multihop), ('event_context', event_context)):
+                       ('review', review), ('answer', answer), ('abstain', abstain), ('clarify', clarify), ('financial', financial), ('mixed', mixed), ('expand_context', expand_context), ('company_info', company_info), ('company_recent', company_recent), ('analyze', analyze), ('multihop', multihop), ('event_context', event_context), ('plan_question', plan_question), ('combined_search', combined_search)):
         graph.add_node(name, node)
     graph.add_edge(START, 'identify')
-    def route_identify(s):
+    def route_identify(s, use_combined=True):
+        if s.get('forced_route') in ('financial', 'retrieve', 'analyze', 'company_info'):
+            return s['forced_route']
         resolved = s.get('status') in ('resolved', 'resolved_compare', 'resolved_multi')
+        if resolved and s.get('kind', 'company') == 'company' and deps.combined_plan is not None and use_combined:
+            return 'combined_search'
         if resolved and s.get('kind', 'company') == 'company' and is_financial_question(s['question']):
             q = s['question']
             names = [e['name'] for e in s['entities']] if s.get('entities') else [s['name']]
@@ -565,12 +674,20 @@ def build_query_graph(deps: QueryDeps):
             return 'financial'
         if s.get('status') in ('resolved_compare', 'resolved_multi'):
             return 'retrieve'
-        if s.get('status') == 'resolved' and s.get('kind') == 'company' and is_business_question(s['question']):
-            return 'company_info'
         if s.get('status') == 'resolved' and s.get('kind') == 'company' and is_executive_event_question(s['question']):
             return 'analyze'
+        if s.get('status') == 'resolved' and s.get('kind') == 'company':
+            if deps.plan is not None:
+                return 'plan_question'
+            if is_business_question(s['question']):
+                return 'company_info'
         return 'retrieve' if s.get('status') == 'resolved' else 'clarify'
-    graph.add_conditional_edges('identify', route_identify, ['retrieve', 'financial', 'financial_background', 'mixed', 'company_info', 'analyze', 'clarify'])
+    graph.add_conditional_edges('identify', route_identify, ['retrieve', 'financial', 'financial_background', 'mixed', 'company_info', 'analyze', 'clarify', 'plan_question', 'combined_search'])
+    def route_fallback(s):
+        resolved = 'resolved_multi' if s.get('entities') and s.get('joint_query') else ('resolved_compare' if s.get('entities') else 'resolved')
+        return route_identify({**s, 'status':resolved}, use_combined=False)
+    graph.add_conditional_edges('combined_search', lambda s: route_fallback(s) if s.get('status') == 'plan_fallback' else END, ['financial','financial_background','mixed','analyze','company_info','plan_question','retrieve',END])
+    graph.add_conditional_edges('plan_question', lambda s: 'company_info' if s['search_plan']['company_overview'] else 'retrieve', ['company_info', 'retrieve'])
     graph.add_conditional_edges('financial_background', lambda s: 'enrich' if s.get('status') == 'answered' else ('generate' if s.get('evidence') else ('abstain' if s.get('financial_answer') else END)), ['enrich','generate','abstain',END])
     graph.add_conditional_edges('analyze', lambda s: 'multihop' if s.get('status') == 'analyzed' else 'abstain', ['multihop','abstain'])
     graph.add_conditional_edges('mixed', lambda s: 'enrich' if s.get('status') == 'answered' else ('generate' if s.get('evidence') else ('abstain' if s.get('financial_answer') else END)), ['enrich', 'generate', 'abstain', END])
@@ -587,7 +704,8 @@ def build_query_graph(deps: QueryDeps):
     graph.add_edge('abstain', 'enrich')
     graph.add_edge('clarify', END)
     graph.add_edge('financial', 'enrich')
-    graph.add_edge('company_info', 'enrich')
+    graph.add_conditional_edges('company_info', lambda s: ('company_recent' if deps.recent_news is not None else 'enrich') if s.get('status') == 'answered' else ('retrieve' if s.get('status') == 'insufficient_evidence' else END), ['company_recent', 'enrich', 'retrieve', END])
+    graph.add_edge('company_recent', 'finalize')
     graph.add_conditional_edges('multihop', lambda s: 'event_context' if s.get('paths') or (deps.documents is not None and s.get('status') != 'search_error') else END, ['event_context', END])
     graph.add_edge('event_context', 'enrich')
     graph.add_edge('enrich', 'finalize')

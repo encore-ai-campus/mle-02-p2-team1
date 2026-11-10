@@ -4,8 +4,10 @@ import os
 import re
 import time
 from copy import deepcopy
+from datetime import datetime
 from html import escape
 from urllib.parse import urlsplit
+from zoneinfo import ZoneInfo
 
 import streamlit as st
 
@@ -36,11 +38,20 @@ h1{letter-spacing:-.055em;font-size:2.3rem!important;font-weight:650}h2{font-siz
 .st-key-event_count,[class*="st-key-event_row_"]{width:100%;background:#fff;border:1px solid #eee5e7;border-radius:22px;box-shadow:0 6px 24px rgba(72,42,50,.025);min-width:0}
 .st-key-event_count{padding:1rem 1.5rem}
 [class*="st-key-event_row_"]{padding:1.5rem 1.8rem}
+[class*="st-key-company_profile_"],[class*="st-key-company_news_"]{width:100%;background:#fff;border:1px solid #eee5e7;border-radius:22px;padding:1.5rem 1.8rem;min-width:0}
+.company-profile-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1.5rem 2.25rem}
+.company-profile-item{min-width:0}
+.company-profile-item--wide{grid-column:span 2}
+.company-profile-label{font-size:.86rem;color:#947f86;margin-bottom:.4rem}
+.company-profile-value{font-size:1.08rem;line-height:1.55;font-weight:650;color:#634450;word-break:keep-all;overflow-wrap:anywhere}
+@media(max-width:700px){.company-profile-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:1.2rem 1.5rem}}
+@media(max-width:420px){.company-profile-grid{grid-template-columns:minmax(0,1fr)}.company-profile-item--wide{grid-column:span 1}}
 .st-key-event_analysis h4{color:#67434e;font-size:1.08rem!important;line-height:1.6}
 .st-key-event_analysis li{color:#51474a;line-height:1.9}
 .st-key-financial_factors{padding:1rem 0}
 .st-key-event_analysis,.st-key-financial_analysis_report{background:#f6eef0;border:1px solid #eee0e5;border-radius:22px;padding:1.6rem 1.8rem;width:100%;min-width:0}
 .st-key-financial_factors h4,.st-key-financial_analysis_report h4{font-size:1.08rem!important;color:#67434e;line-height:1.6;margin-top:.8rem;font-weight:650}
+.st-key-financial_factors ul,.st-key-financial_analysis_report ul{padding-left:1.4rem;margin-left:0}
 .st-key-financial_factors li,.st-key-financial_analysis_report li{color:#51474a;line-height:1.9;margin:.4rem 0}
 .st-key-answer_overview,[class*="st-key-answer_card_"],[class*="st-key-analysis_card_"],[class*="st-key-financial_card_"]{background:#fff;border:1px solid #eee5e7;border-radius:22px;padding:1.5rem;box-shadow:0 6px 24px rgba(72,42,50,.025);height:100%;min-width:0}
 .st-key-answer_overview{background:#f6eef0;border-color:#f0e3e7;padding:1.6rem 1.8rem}
@@ -141,18 +152,31 @@ def http_url(value):
 
 
 def report_text(result):
-    return result.get('answer', '') + '\n\n출처\n' + '\n'.join(
+    profiles = result.get('company_profiles') or ([result['company_overview']] if result.get('company_overview') else [])
+    blocks = []
+    for profile in profiles:
+        fields = '\n'.join(f"{f['label']}: {f['value']}" for f in profile.get('fields', []))
+        news = '\n'.join(f"{n['heading']} ({publication_day(n.get('published_at'))}, 기사 발행): {n['text']}" for n in profile.get('news', []))
+        blocks.append('\n'.join(x for x in (profile.get('name',''), fields,
+            '주요 사업: ' + profile['business'] if profile.get('business') else '', news) if x))
+    return '\n\n'.join(blocks + [result.get('answer', '')]) + '\n\n출처\n' + '\n'.join(
         f"[{s['number']}] {s['title']}\n{s['url']}" for s in result.get('sources', []))
 
 
+def publication_day(value):
+    try:
+        date = datetime.fromisoformat(str(value).replace('Z','+00:00'))
+        return date.astimezone(ZoneInfo('Asia/Seoul')).strftime('%Y-%m-%d') if date.tzinfo else ''
+    except (ValueError, TypeError):
+        return ''
+
+
 def render_section_cards(sections, prefix):
-    for start in range(0, len(sections), 2):
-        group = sections[start:start + 2]
-        for offset, (column, section) in enumerate(zip(st.columns(len(group), gap='medium'), group)):
-            with column, st.container(key=f'{prefix}_{start + offset}'):
-                if section.get('heading'):
-                    st.subheader(section['heading'])
-                st.write(section['text'])
+    for index, section in enumerate(sections):
+        with st.container(key=f'{prefix}_{index}'):
+            if section.get('heading'):
+                st.subheader(section['heading'])
+            st.write(section['text'])
 
 
 def repeats_financial_amount(section, cards):
@@ -170,11 +194,19 @@ def repeats_financial_amount(section, cards):
     return False
 
 
+def financial_heading(heading):
+    """Move internal scope prefixes out of the way without losing their meaning."""
+    prefix = '연결 사업 · '
+    if heading.startswith(prefix):
+        return heading[len(prefix):].strip() + ' (연결 사업 기준)'
+    return heading
+
+
 def render_financial_outline(sections):
     """Keep verified wording intact, displayed as a report outline, not tiles."""
     for section in sections:
         if section.get('heading'):
-            st.markdown('#### ' + section['heading'])
+            st.markdown('#### ' + financial_heading(section['heading']))
         # New responses contain bullet lines; old responses remain intact as one
         # bullet per paragraph. Never split numbers or rewrite causal wording.
         points = [re.sub(r'^[-*•]\s+', '', line.strip())
@@ -228,6 +260,29 @@ def financial_period_caption(card):
 
 def render_answer(result):
     with st.container(key='answer_dashboard'):
+        profiles = result.get('company_profiles') or ([result['company_overview']] if result.get('company_overview') else [])
+        for profile_index, profile in enumerate(profiles):
+            st.subheader((profile.get('name') + ' · ' if len(profiles)>1 and profile.get('name') else '') + '기업 한눈에 보기')
+            if profile.get('fields'):
+                with st.container(key=f'company_profile_{profile_index}'):
+                    cells = ''.join('<div class="company-profile-item' + (' company-profile-item--wide' if field.get('field') == 'industry' or field.get('label') == '업종' else '') + '"><div class="company-profile-label">' + escape(str(field['label'])) +
+                        '</div><div class="company-profile-value">' + escape(str(field['value'])) + '</div></div>'
+                        for field in profile['fields'])
+                    st.markdown('<div class="company-profile-grid">' + cells + '</div>', unsafe_allow_html=True)
+            else:
+                st.write('확인된 기본정보가 없어요.')
+            st.subheader('주요 사업')
+            st.write(profile.get('business') or '확인된 주요 사업 정보가 없어요.')
+            st.subheader('최근 소식')
+            for news_index, item in enumerate(profile.get('news', [])[:3]):
+                with st.container(key=f'company_news_{profile_index}_{news_index}'):
+                    st.subheader(item['heading'])
+                    if publication_day(item.get('published_at')):
+                        st.caption('기사 발행일 · ' + publication_day(item['published_at']))
+                    st.write(item['text'])
+            if not profile.get('news'):
+                st.write('최근 소식 검색을 완료하지 못했어요.' if profile.get('recent_status') == 'unavailable'
+                         else '확인된 최근 소식이 없어요.')
         events = result.get('event_cards') or []
         if events:
             with st.container(key='event_count'):
@@ -260,12 +315,10 @@ def render_answer(result):
                         unsafe_allow_html=True,
                     )
                     financial_period_caption(card)
-            for start in range(0, len(other_cards), 3):
-                group = other_cards[start:start + 3]
-                for column, (index, card) in zip(st.columns(len(group), gap='medium'), group):
-                    with column, st.container(key=f'financial_card_{index}'):
-                        st.metric(f"{card.get('company') or ''} · {card['label']}", f"{card['value']:,}원")
-                        financial_period_caption(card)
+            for index, card in other_cards:
+                with st.container(key=f'financial_card_{index}'):
+                    st.metric(f"{card.get('company') or ''} · {card['label']}", f"{card['value']:,}원")
+                    financial_period_caption(card)
 
         if cards and not events:
             render_financial_report(result, cards)
@@ -273,11 +326,13 @@ def render_answer(result):
 
         sections = result.get('sections') or []
         basic = [section for section in sections if section.get('section_type') != 'additional']
+        if result.get('company_overview') and not result.get('company_profiles'):
+            basic = []
         additional = [section for section in sections if section.get('section_type') == 'additional']
         overview = [result['lead']] if result.get('lead') else []
         if basic and not basic[0].get('heading'):
             overview.append(basic.pop(0)['text'])
-        if not sections and not overview and not cards and not events:
+        if not sections and not overview and not cards and not events and not profiles:
             overview.append(result.get('answer', '답변을 만들지 못했어요.'))
         if overview:
             with st.container(key='answer_overview'):
@@ -289,6 +344,10 @@ def render_answer(result):
             render_section_cards(basic, 'answer_card')
         if additional:
             if events:
+                with st.container(key='event_analysis'):
+                    st.subheader('✦ AI 통합분석')
+                    render_financial_outline(additional)
+            elif profiles:
                 with st.container(key='event_analysis'):
                     st.subheader('✦ AI 통합분석')
                     render_financial_outline(additional)
@@ -316,6 +375,20 @@ def render_quality(result):
         st.write(' → '.join(trace.get('steps', [])))
         if trace.get('executed_nodes'):
             st.caption('실제 실행 단계: ' + ' → '.join(trace['executed_nodes']))
+        plan = trace.get('search_plan')
+        if plan:
+            requested = ['회사 기본정보'] if plan.get('company_overview') else []
+            if plan.get('financial'):
+                requested.append('재무·비교')
+            if plan.get('executive_events'):
+                requested.append('대표·회장 행사')
+            if plan.get('graph_context'):
+                requested.append('관련 관계·기사')
+            st.caption('질문 분석: ' + (' · '.join(requested) if requested else '일반 검색') +
+                       (' (대체 규칙 사용)' if plan.get('source') == 'rule_fallback' else ''))
+        for component in trace.get('components', []):
+            st.caption('요청별 실행 · ' + component['task'] + ': ' +
+                       (' → '.join(component.get('executed_nodes', [])) or component['status']))
         if trace.get('node_timings'):
             st.caption('단계별 시간: ' + ' · '.join(
                 f"{'/'.join(t['nodes'])} {t['elapsed_ms'] / 1000:.1f}초" for t in trace['node_timings']))

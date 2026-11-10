@@ -41,6 +41,11 @@ class UnifiedServiceTests(unittest.TestCase):
             stack.enter_context(patch('bulsae.graphrag.document_search.fetch_evidence', return_value=[]))
             stack.enter_context(patch('bulsae.graphrag.document_fallback.fetch_document_evidence', return_value=[]))
             api = stack.enter_context(patch('openai.OpenAI'))
+            stack.enter_context(patch('bulsae.graphrag.question_analysis.plan_company_question',
+                                      return_value={'company_overview':True, 'graph_context':True}))
+            stack.enter_context(patch('bulsae.graphrag.question_analysis.plan_question',
+                return_value={'company_overview':True, 'financial':False, 'graph_context':False,
+                              'executive_events':False, 'financial_metrics':[], 'executive_role':'none', 'event_year':None}))
             compose = stack.enter_context(patch('bulsae.graphrag.related_analysis.compose_final_answer',
                 return_value={'sections':[], 'diagnostics':{'status':'no_summary'}}))
             app = AppTest.from_file(str(APP)).run()
@@ -49,10 +54,9 @@ class UnifiedServiceTests(unittest.TestCase):
             self.assertFalse(app.exception)
             response = app.session_state['result']
             self.assertEqual(response['status'], 'answered')
-            self.assertEqual(response['trace']['executed_nodes'], ['identify','company_info','enrich','finalize'])
-            self.assertEqual(response['lead'], '가온은 화장품을 제조해요.')
-            self.assertEqual(sum(m.value == response['lead'] for m in app.markdown), 1)
-            self.assertEqual(response['sections'], [])
+            self.assertEqual(response['trace']['executed_nodes'], ['identify','combined_search'])
+            self.assertEqual(response['company_profiles'][0]['business'], '가온은 화장품을 제조해요.')
+            self.assertEqual(sum(m.value == '가온은 화장품을 제조해요.' for m in app.markdown), 1)
             self.assertTrue(response['record_saved'])
             company.assert_called_once_with(driver.return_value.__enter__.return_value, '가온')
             compose.assert_called_once()
