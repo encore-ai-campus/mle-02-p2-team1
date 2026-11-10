@@ -489,7 +489,15 @@ def main():
             try:
                 st.session_state['result'] = {**run_question(pending), 'question': pending}
             except Exception as exc:
-                logger.error('Question processing failed: %s', type(exc).__name__)
+                frames = []
+                tb = exc.__traceback__
+                while tb is not None:
+                    frames.append(tb.tb_frame.f_code.co_name)
+                    tb = tb.tb_next
+                settings = {name: bool(os.getenv(name)) for name in
+                            ('OPENAI_API_KEY', 'NEO4J_URI', 'NEO4J_USERNAME', 'NEO4J_PASSWORD')}
+                logger.error('Question processing failed: %s; functions=%s; settings_present=%s',
+                             type(exc).__name__, ' > '.join(frames), settings)
                 st.session_state['result'] = {'question':pending, 'status':'error',
                     'answer':'지금은 답변을 불러올 수 없어요. 잠시 후 다시 시도해 주세요.',
                     'sections':[], 'sources':[], 'trace':{}}
