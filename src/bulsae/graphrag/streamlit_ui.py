@@ -1,5 +1,6 @@
 """Customer-facing Streamlit UI over the existing read-only GraphRAG flow."""
 import json
+import logging
 import os
 import re
 import time
@@ -10,6 +11,8 @@ from urllib.parse import urlsplit
 from zoneinfo import ZoneInfo
 
 import streamlit as st
+
+logger = logging.getLogger(__name__)
 
 RELATIONS = {'WORKS_AT': '재직', 'PARTICIPATED_IN': '참여', 'ANNOUNCED_STRATEGY': '전략 발표',
              'PARTNERS_WITH': '협력', 'PARENT_OF': '모회사', 'SUPPLIES_TO': '공급',
@@ -485,7 +488,8 @@ def main():
             st.markdown(LOADING_HTML, unsafe_allow_html=True)
             try:
                 st.session_state['result'] = {**run_question(pending), 'question': pending}
-            except Exception:
+            except Exception as exc:
+                logger.error('Question processing failed: %s', type(exc).__name__)
                 st.session_state['result'] = {'question':pending, 'status':'error',
                     'answer':'지금은 답변을 불러올 수 없어요. 잠시 후 다시 시도해 주세요.',
                     'sections':[], 'sources':[], 'trace':{}}

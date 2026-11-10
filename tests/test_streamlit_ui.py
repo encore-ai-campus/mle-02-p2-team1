@@ -8,6 +8,16 @@ APP = Path(__file__).resolve().parents[1] / 'streamlit_app.py'
 
 
 class StreamlitUITest(unittest.TestCase):
+    def test_failure_logs_error_type_without_exception_message(self):
+        with patch('bulsae.graphrag.streamlit_ui.run_question', side_effect=RuntimeError('sensitive details')):
+            with self.assertLogs('bulsae.graphrag.streamlit_ui', level='ERROR') as logged:
+                app = AppTest.from_file(str(APP)).run()
+                app.text_area[0].set_value('시험 질문')
+                app.button(key='submit_question').click().run()
+        self.assertIn('RuntimeError', logged.output[0])
+        self.assertNotIn('sensitive details', logged.output[0])
+        self.assertFalse(app.exception)
+
     def test_company_overview_order_and_bounded_news(self):
         result={'question':'회사 소개','status':'answered','answer':'회사 소개','sources':[],'trace':{},
             'company_profiles':[{'name':'가온','fields':[{'label':'업종','value':'화장품'}],
